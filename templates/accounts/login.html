@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - VetSphere{% endblock %}
+
+{% block content %}
+
+<!-- Steve Harrington / Stranger Things Background -->
+<div class="steve-harrington-bg">
+    <div class="sh-gradient"></div>
+    <div id="shParticles" class="sh-particles"></div>
+</div>
+
+<div class="container fade-in">
+<div class="login-wrapper">
+    <div class="glass-card" style="padding: 3.5rem; max-width: 550px; width: 100%;">
+        <div class="login-header">
+            <div class="brand-icon shimmer">
+                <img src="{% static 'images/logo.png' %}?v=3" alt="VetSphere" style="width: 70%; height: 70%; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));">
+            </div>
+            <h1 style="font-size: 2.25rem; font-weight: 900; letter-spacing: -0.05em;">Welcome <span class="text-highlight">Back</span></h1>
+            <p style="font-size: 1.05rem; margin-top: 0.5rem; color: var(--text-secondary);">Access your premium sanctuary.</p>
+        </div>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="error-msg">
+                {% for error in form.non_field_errors %}
+                <p><i class="fas fa-exclamation-circle"></i> {{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% for field in form %}
+            <div class="field-wrap">
+                <label for="{{ field.id_for_label }}" style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">{{ field.label }}</label>
+                <div class="input-inner">
+                    {% if field.field.widget.input_type == 'password' %}
+                        <i class="fas fa-lock icon-input" style="color: var(--primary);"></i>
+                        <input type="password" name="{{ field.name }}" id="{{ field.id_for_label }}" class="input-field" placeholder="••••••••" required style="border-radius: var(--radius-lg); padding-left: 3rem;">
+                        <button type="button" class="eye-toggle" onclick="togglePass('{{ field.id_for_label }}', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    {% else %}
+                        <i class="fas fa-user icon-input" style="color: var(--primary);"></i>
+                        <input type="text" name="{{ field.name }}" id="{{ field.id_for_label }}" class="input-field" placeholder="Username" required style="border-radius: var(--radius-lg); padding-left: 3rem;">
+                    {% endif %}
+                </div>
+                {% if field.errors %}
+                <span class="error-text">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary shimmer" style="width: 100%; padding: 1.15rem; font-size: 1.1rem; border-radius: var(--radius-lg); margin-top: 1.5rem;">
+                <span>Sign In</span>
+                <i class="fas fa-arrow-right" style="font-size: 0.8rem;"></i>
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 1.25rem;">
+            <a href="{% url 'forgot_password' %}" style="color: var(--text-muted); font-size: 0.88rem; text-decoration: none; font-weight: 600; transition: color 0.2s ease;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
+                <i class="fas fa-key" style="font-size: 0.75rem; margin-right: 0.3rem;"></i>Forgot Password?
+            </a>
+        </div>
+
+        <div class="auth-footer" style="border-color: var(--glass-border); margin-top: 2.5rem;">
+            <p>New to VetSphere? <a href="{% url 'register' %}" style="color: var(--primary); font-weight: 800;">Create Account</a></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ==================== STRANGER THINGS BG ==================== */
+    .steve-harrington-bg {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: #050505;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+    
+    .sh-gradient {
+        position: absolute;
+        width: 100%; height: 100%;
+        background: radial-gradient(circle at 50% 120%, rgba(130, 0, 0, 0.4) 0%, rgba(0, 10, 40, 0.8) 60%, rgba(0, 0, 0, 1) 100%);
+        animation: strangerPulse 6s ease-in-out infinite alternate;
+    }
+    
+    @keyframes strangerPulse {
+        0% { opacity: 0.7; filter: hue-rotate(0deg); transform: scale(1); }
+        100% { opacity: 1; filter: hue-rotate(15deg); transform: scale(1.05); }
+    }
+    
+    .sh-particles {
+        position: absolute;
+        width: 100%; height: 100%;
+        z-index: 2;
+    }
+    
+    .sh-spore {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        filter: blur(1.5px);
+        animation: floatSpore linear infinite;
+    }
+    
+    @keyframes floatSpore {
+        0% { transform: translateY(110vh) translateX(0) scale(0.8) rotate(0deg); opacity: 0; }
+        20% { opacity: 0.6; }
+        80% { opacity: 0.4; }
+        100% { transform: translateY(-10vh) translateX(var(--drift)) scale(1.5) rotate(180deg); opacity: 0; }
+    }
+
+    /* ==================== LOGIN FORM ==================== */
+    .login-wrapper {
+        position: relative;
+        z-index: 10;
+        min-height: 75vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .glass-card {
+        background: rgba(15, 23, 42, 0.45);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius-2xl);
+        padding: 3rem;
+        width: 100%;
+        max-width: 550px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(130, 0, 0, 0.2);
+        animation: cardPopUp 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards, eerieFloat 6s ease-in-out infinite alternate 0.8s;
+        /* Start hidden for the popUp */
+        opacity: 0;
+    }
+
+    @keyframes cardPopUp {
+        from { transform: scale(0.95) translateY(20px); opacity: 0; filter: blur(4px); }
+        to { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+    }
+
+    @keyframes eerieFloat {
+        0% { transform: translateY(0); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(130, 0, 0, 0.2); border-color: rgba(255, 255, 255, 0.08); }
+        100% { transform: translateY(-6px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(130, 0, 0, 0.5); border-color: rgba(255, 0, 0, 0.2); }
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .brand-icon {
+        width: 52px;
+        height: 52px;
+        background: var(--gradient-primary);
+        color: white;
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.25rem;
+        animation: neonFlicker 5s infinite alternate;
+        border: 1px solid rgba(255,255,255,0.1);
+        overflow: hidden;
+    }
+
+    @keyframes neonFlicker {
+        0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+            opacity: 1;
+            box-shadow: 0 8px 20px rgba(15, 118, 110, 0.25), 0 0 15px rgba(255, 50, 50, 0.4);
+        }
+        20%, 24%, 55% {
+            opacity: 0.6;
+            box-shadow: none;
+        }
+    }
+
+    .login-header h1 {
+        font-size: 1.85rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 0.35rem;
+        letter-spacing: -0.02em;
+    }
+
+    .login-header p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .auth-form .field-wrap {
+        margin-bottom: 1.5rem;
+    }
+
+    .auth-form label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .input-inner {
+        position: relative;
+    }
+
+    .icon-input {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary);
+        opacity: 0.5;
+        font-size: 0.85rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.85rem 2.75rem 0.85rem 2.75rem;
+        border: 1.5px solid var(--input-border);
+        border-radius: var(--radius);
+        font-size: 0.9rem;
+        transition: all var(--duration) var(--ease);
+        background: var(--input-bg);
+        color: var(--text-main);
+        font-family: inherit;
+    }
+
+    .input-field:focus {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-glow);
+        outline: none;
+    }
+
+    .eye-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 0.35rem;
+        font-size: 0.9rem;
+    }
+
+    .error-msg {
+        background: var(--alert-error-bg);
+        border-left: 4px solid var(--alert-error-text);
+        padding: 0.85rem 1rem;
+        border-radius: var(--radius);
+        margin-bottom: 1.5rem;
+        color: var(--alert-error-text);
+        font-size: 0.88rem;
+    }
+
+    .error-text {
+        color: var(--alert-error-text);
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    .submit-btn-premium {
+        width: 100%;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: var(--radius);
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        transition: all var(--duration) var(--ease);
+        margin-top: 2rem;
+        font-family: inherit;
+    }
+
+    .submit-btn-premium:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(15, 118, 110, 0.3);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 1.75rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .auth-footer p {
+        color: var(--text-muted);
+        margin-bottom: 0.6rem;
+        font-size: 0.88rem;
+    }
+
+    .auth-footer a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .auth-footer a:hover {
+        text-decoration: underline;
+    }
+
+    .staff-hint { font-size: 0.82rem !important; margin-top: 0.5rem; }
+    .staff-hint a { color: var(--text-muted) !important; font-weight: 600 !important; }
+    .staff-hint a:hover { color: var(--primary) !important; }
+</style>
+
+<script>
+(function() {
+    const particlesContainer = document.getElementById('shParticles');
+    if (particlesContainer) {
+        // Create Upside Down Ash Particles
+        const sporeCount = 40;
+        for (let i = 0; i < sporeCount; i++) {
+            const spore = document.createElement('div');
+            spore.className = 'sh-spore';
+            
+            // Random properties
+            const size = Math.random() * 4 + 1; // 1px to 5px
+            const left = Math.random() * 100; // 0% to 100%
+            const drift = (Math.random() - 0.5) * 150; // drift
+            const duration = Math.random() * 8 + 5; // 5s to 13s
+            const delay = Math.random() * 10; // Start offset
+            
+            spore.style.width = size + 'px';
+            spore.style.height = size + 'px';
+            spore.style.left = left + '%';
+            spore.style.setProperty('--drift', drift + 'px');
+            spore.style.animationDuration = duration + 's';
+            spore.style.animationDelay = '-' + delay + 's';
+            
+            particlesContainer.appendChild(spore);
+        }
+    }
+})();
+
+    function togglePass(id, btn) {
+        const inp = document.getElementById(id);
+        const icon = btn.querySelector('i');
+        if (inp.type === 'password') {
+            inp.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            inp.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+</script>
+{% endblock %}

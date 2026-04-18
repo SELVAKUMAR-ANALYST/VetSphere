@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Invoice #{{ invoice.pk }} - VetSphere{% endblock %}
+
+{% block extra_css %}
+<style>
+    .invoice-status { font-weight: 700; }
+    .status-paid { color: var(--alert-success-text); }
+    .status-unpaid { color: var(--alert-error-text); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="fade-in" style="max-width: 800px; margin: 1.5rem auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem;">
+        <h1 style="font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em;">Invoice Details</h1>
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="{% url 'generate_invoice_pdf' invoice.pk %}" class="btn btn-primary">
+                <i class="fas fa-file-pdf"></i> Download PDF
+            </a>
+            <a href="{% url 'invoice_list' %}" class="btn" style="background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border);">Back</a>
+        </div>
+    </div>
+
+    <div style="background: var(--card-bg); padding: 2.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--border);">
+        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 1.75rem; margin-bottom: 1.75rem;">
+            <div>
+                <h2 style="color: var(--primary); font-weight: 800; margin-bottom: 0.35rem; font-size: 1.4rem; letter-spacing: -0.02em;">VETSPHERE</h2>
+                <p style="color: var(--text-muted); font-size: 0.82rem;">
+                    15, Gandhi Nagar Main Road<br>
+                    Adyar, Chennai - 600020
+                </p>
+            </div>
+            <div style="text-align: right;">
+                <h3 style="margin-bottom: 0.35rem; font-size: 1rem; font-weight: 700;">Invoice #{{ invoice.pk }}</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">
+                    Issued: {{ invoice.issued_date|date:"d M Y" }}<br>
+                    Status: <span class="invoice-status status-{{ invoice.status }}">{{ invoice.status|upper }}</span>
+                </p>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <h4 style="margin-bottom: 0.6rem; color: var(--text-main); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Billing To:</h4>
+            <p>
+                <strong>{{ invoice.booking.pet.owner.get_full_name|default:invoice.booking.pet.owner.username }}</strong><br>
+                {{ invoice.booking.pet.name }} (Pet)<br>
+                {% if invoice.booking.pet.owner.customer_profile and invoice.booking.pet.owner.customer_profile.billing_address %}
+                {{ invoice.booking.pet.owner.customer_profile.billing_address|linebreaksbr }}
+                {% else %}
+                <span style="color: var(--text-muted); font-style: italic; font-size: 0.88rem;">Address not provided</span>
+                {% endif %}
+            </p>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--border);">
+                    <th style="text-align: left; padding: 0.85rem 0; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">Description</th>
+                    <th style="text-align: right; padding: 0.85rem 0; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 1.25rem 0;">
+                        <strong>{{ invoice.booking.service.name|default:"Standard Care" }}</strong><br>
+                        <span style="font-size: 0.82rem; color: var(--text-muted);">Session for {{ invoice.booking.pet.name }} on {{ invoice.booking.start_time|date:"d M Y" }}</span>
+                    </td>
+                    <td style="text-align: right; font-weight: 600;">₹{{ invoice.amount }}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td style="padding-top: 1.5rem; text-align: right; font-weight: 600; font-size: 0.9rem;">Total Amount</td>
+                    <td style="padding-top: 1.5rem; text-align: right; font-size: 1.4rem; font-weight: 800; color: var(--primary);">₹{{ invoice.amount }}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        {% if invoice.status == 'unpaid' %}
+        <div style="background: var(--alert-error-bg); border: 1px solid var(--alert-error-border); padding: 1.5rem; border-radius: var(--radius-lg); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);">
+            <div>
+                <p style="color: var(--alert-error-text); margin: 0; font-size: 1rem; font-weight: 700;">Payment Required</p>
+                <p style="color: var(--alert-error-text); margin: 0; font-size: 0.85rem; opacity: 0.9;">Please complete the payment for this invoice.</p>
+            </div>
+            <a href="{% url 'pay_invoice' invoice.pk %}" class="btn btn-highlight" style="padding: 0.75rem 1.75rem; font-weight: 800; font-size: 1rem;">
+                <i class="fas fa-credit-card"></i> Pay Now
+            </a>
+        </div>
+        {% else %}
+        <div style="background: var(--alert-success-bg); border: 1px solid var(--alert-success-border); padding: 1.25rem; border-radius: var(--radius); text-align: center;">
+            <p style="color: var(--alert-success-text); margin: 0; margin-bottom: 0.35rem; font-size: 0.9rem;">
+                <i class="fas fa-check-circle"></i> This invoice has been <strong>fully paid</strong>.
+            </p>
+            {% with payment=invoice.payment_set.first %}
+            {% if payment %}
+            <p style="font-size: 0.8rem; color: var(--alert-success-text); margin: 0; opacity: 0.8;">
+                Paid via: <strong>{{ payment.get_payment_method_display }}</strong> on {{ payment.payment_date|date:"d M Y, H:i" }}
+            </p>
+            {% endif %}
+            {% endwith %}
+        </div>
+        {% endif %}
+    </div>
+    </div>
+</div>
+{% endblock %}

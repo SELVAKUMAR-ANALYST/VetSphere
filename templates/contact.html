@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - VetSphere{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-hero {
+        background: var(--gradient-hero);
+        color: white;
+        text-align: center;
+        padding: 8rem 2rem 6rem;
+        margin-bottom: 0;
+        border-radius: 0;
+        position: relative;
+    }
+
+    .contact-hero h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.05em;
+    }
+
+    .contact-info-card, .contact-form-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: var(--radius-2xl);
+        padding: 3.5rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--glass-border);
+    }
+
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.5fr;
+        gap: 2.5rem;
+        align-items: start;
+        margin-bottom: 8rem;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.15rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        color: var(--text-main);
+        font-size: 0.88rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.7rem 0.9rem;
+        border: 1.5px solid var(--input-border);
+        border-radius: var(--radius);
+        background: var(--input-bg);
+        color: var(--text-main);
+        font-size: 0.9rem;
+        font-family: inherit;
+        outline: none;
+        transition: border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-glow);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 0.85rem;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius);
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all var(--duration) var(--ease);
+        font-family: inherit;
+        letter-spacing: 0.02em;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(15, 118, 110, 0.3);
+    }
+
+    .success-banner {
+        background: var(--alert-success-bg);
+        color: var(--alert-success-text);
+        border: 1px solid var(--alert-success-border);
+        border-radius: var(--radius);
+        padding: 0.85rem 1.15rem;
+        margin-bottom: 1.25rem;
+        display: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .success-banner.show {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    @media (max-width: 800px) {
+        .contact-grid { grid-template-columns: 1fr; }
+        .form-row { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+    <div class="contact-hero" style="display: grid; grid-template-columns: 1fr 1fr; align-items: center; text-align: left; padding: 6rem 8rem;">
+    <div class="fade-in">
+        <h1>Contact <span class="text-highlight">Our Team</span></h1>
+        <p style="font-size: 1.25rem; max-width: 500px; line-height: 1.8; color: rgba(255,255,255,0.85);">We'd love to hear from you! Reach out for appointments, queries, or anything about your pet's journey with us.</p>
+    </div>
+    <div class="fade-in" style="animation-delay: 0.2s; display: flex; justify-content: flex-end;">
+        <div class="glass-card hover-lift" style="padding: 0.75rem; border-radius: var(--radius-2xl); width: fit-content;">
+            <img src="{% static 'images/contact_gs.png' %}?v=2" alt="German Shepherd" style="width: 400px; height: 320px; object-fit: cover; border-radius: var(--radius-xl); display: block; filter: brightness(1.1);">
+        </div>
+    </div>
+</div>
+
+<!-- Main Grid -->
+<div class="container">
+<div class="contact-grid">
+
+    <!-- Left: Info -->
+    <div>
+        <div class="contact-info-card">
+            <h2 style="color: var(--primary); margin-bottom: 2rem;">Get in Touch</h2>
+
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="info-text">
+                    <h4>Our Location</h4>
+                    <p>15, Gandhi Nagar Main Road, Adyar,<br>Chennai – 600020</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+                <div class="info-text">
+                    <h4>Phone</h4>
+                    <p><a href="tel:+919360226522" style="color: var(--primary); text-decoration: none;">+91 93602 26522</a></p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                <div class="info-text">
+                    <h4>Email</h4>
+                    <p><a href="mailto:vetsphere@gmail.com" style="color: var(--primary); text-decoration: none;">vetsphere@gmail.com</a></p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-clock"></i></div>
+                <div class="info-text">
+                    <h4>Working Hours</h4>
+                    <p>Mon – Sat: 9:00 AM – 7:00 PM<br>Sunday: 10:00 AM – 4:00 PM</p>
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div class="map-placeholder">
+                <iframe
+                    src="https://maps.google.com/maps?q=15,+Gandhi+Nagar+Main+Road,+Adyar,+Chennai&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                    title="VetSphere Location">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Middle: Image Enhancement -->
+    <div class="fade-in" style="animation-delay: 0.3s;">
+        <div class="glass-card hover-lift shimmer" style="padding: 0.5rem; border-radius: var(--radius-2xl); height: 100%;">
+            <img src="{% static 'images/contact_husky.png' %}?v=2" alt="Majestic Husky" 
+                 style="width: 100%; height: 600px; object-fit: cover; border-radius: var(--radius-xl); display: block;">
+            <div style="padding: 1.5rem; text-align: center;">
+                <span class="text-highlight" style="font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em;">Guardians of Wellness</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Form -->
+    <div class="fade-in" style="animation-delay: 0.4s;">
+        <div class="contact-form-card">
+            <h2 style="color: var(--primary); margin-bottom: 2rem;">Send Us a Message</h2>
+
+            <div class="success-banner {% if success %}show{% endif %}" id="successBanner">
+                <i class="fas fa-check-circle"></i>
+                <span>Your message has been sent! We'll get back to you soon.</span>
+            </div>
+
+            <form id="contactForm" method="POST" action="{% url 'contact' %}">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" placeholder="John" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" placeholder="Doe" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210">
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject">
+                        <option value="">Select a subject</option>
+                        <option value="appointment">Book an Appointment</option>
+                        <option value="grooming">Grooming Services</option>
+                        <option value="emergency">Emergency Care</option>
+                        <option value="billing">Billing Enquiry</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Tell us about your pet and how we can help..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-paper-plane"></i> &nbsp;Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if success %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const banner = document.getElementById('successBanner');
+        banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        setTimeout(() => banner.classList.remove('show'), 6000);
+    });
+</script>
+{% endif %}
+{% endblock %}

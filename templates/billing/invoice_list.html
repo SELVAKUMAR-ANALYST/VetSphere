@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Billing - VetSphere{% endblock %}
+
+{% block extra_css %}
+<style>
+    .invoice-card {
+        background: var(--card-bg);
+        border-radius: var(--radius-xl);
+        padding: 1.25rem 1.5rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        margin-bottom: 0.85rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all var(--duration) var(--ease);
+    }
+
+    .invoice-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+    }
+
+    .status-badge { padding: 0.2rem 0.65rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 600; }
+    .status-unpaid { background: var(--alert-error-bg); color: var(--alert-error-text); }
+    .status-paid { background: var(--alert-success-bg); color: var(--alert-success-text); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="fade-in">
+    <h1 style="margin-bottom: 2rem; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em;">Billing & Invoices</h1>
+
+    {% if invoices %}
+    {% for invoice in invoices %}
+    <div class="invoice-card">
+        <div>
+            <a href="{% url 'invoice_detail' invoice.pk %}" style="text-decoration: none; color: inherit;">
+                <h3 style="color: var(--text-main); margin-bottom: 0.2rem; font-size: 1rem; font-weight: 700;">Invoice #{{ invoice.pk }}</h3>
+            </a>
+            <p style="color: var(--text-muted); font-size: 0.82rem;">
+                <i class="fas fa-dog"></i> {{ invoice.booking.pet.name }} - {{ invoice.booking.start_time|date:"d M Y" }}
+                <br>
+                <i class="far fa-calendar-alt"></i> Issued on {{ invoice.issued_date|date:"d M Y" }}
+            </p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <span style="font-weight: 800; font-size: 1.05rem;">₹{{ invoice.amount }}</span>
+            <span class="status-badge status-{{ invoice.status }}">{{ invoice.status|capfirst }}</span>
+
+            <div style="display: flex; gap: 0.4rem;">
+                <a href="{% url 'invoice_detail' invoice.pk %}" class="btn btn-sm" style="background: var(--primary-light); color: var(--primary); border: none;">
+                    <i class="fas fa-eye"></i> View
+                </a>
+                <a href="{% url 'generate_invoice_pdf' invoice.pk %}" class="btn btn-sm" style="background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border);">
+                    <i class="fas fa-file-download"></i>
+                </a>
+                {% if invoice.status == 'unpaid' %}
+                <a href="{% url 'pay_invoice' invoice.pk %}" class="btn btn-highlight btn-sm">
+                    <i class="fas fa-credit-card"></i> Pay Now
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div style="text-align: center; padding: 3.5rem; background: var(--card-bg); border-radius: var(--radius-xl); border: 2px dashed var(--border);">
+        <i class="fas fa-receipt" style="font-size: 2.5rem; color: var(--text-faint); margin-bottom: 1rem;"></i>
+        <h3 style="font-weight: 700; margin-bottom: 0.5rem;">No invoices found</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Your billing history will appear here once you complete pet care sessions.</p>
+    </div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

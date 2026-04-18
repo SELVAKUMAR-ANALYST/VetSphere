@@ -1,0 +1,886 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sign Up - VetSphere{% endblock %}
+
+{% block content %}
+<!-- Animated Gradient Background -->
+<div class="vs-bg-gradient"></div>
+
+<!-- Morphing Blobs -->
+<div class="vs-blob vs-blob-1"></div>
+<div class="vs-blob vs-blob-2"></div>
+<div class="vs-blob vs-blob-3"></div>
+
+<!-- Floating Particles -->
+<div id="vs-particles"></div>
+
+<!-- Walking Paw Prints Trail -->
+<div id="vs-paw-trail"></div>
+
+<div class="container fade-in">
+<div style="min-height: 85vh; display: flex; align-items: center; justify-content: center; padding: clamp(1rem, 5vw, 2rem); position: relative; z-index: 2;">
+    <div class="vs-register-card" id="tiltCard" style="max-width: 900px;">
+        
+        
+        <!-- Corner decorations -->
+        <div class="vs-corner vs-corner-tl"></div>
+        <div class="vs-corner vs-corner-tr"></div>
+        <div class="vs-corner vs-corner-bl"></div>
+        <div class="vs-corner vs-corner-br"></div>
+
+        <div style="text-align: center; margin-bottom: 2.5rem;" class="vs-header-section">
+            <!-- Magical Center Rotation -->
+            <div class="vs-icon-wrapper">
+                <!-- Orbiting golden particles -->
+                <div class="vs-orbit-particle vs-op-1">✦</div>
+                <div class="vs-orbit-particle vs-op-2">⚡</div>
+                <div class="vs-orbit-particle vs-op-3">✧</div>
+                <div class="vs-orbit-particle vs-op-4">★</div>
+                <!-- Center rotating logo -->
+                <div class="vs-paw-icon" style="background: transparent; border: none; box-shadow: none;">
+                    <img src="{% static 'images/logo.png' %}?v=3" alt="VetSphere" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255,255,255,0.5));">
+                </div>
+                <!-- Glow pulse -->
+                <div class="vs-icon-glow"></div>
+            </div>
+            
+            <h2 class="vs-title">
+                Join <span class="vs-gradient-text">VetSphere</span> ⚡
+            </h2>
+            <p class="vs-subtitle" id="typingText"></p>
+        </div>
+
+        <form method="post" id="registerForm" class="vs-grid-form">
+            {% csrf_token %}
+            <div class="vs-form-grid-container">
+                {% for field in form %}
+                <div class="vs-form-group">
+                    <label class="vs-label">{{ field.label }}</label>
+                    <div class="vs-input-wrapper">
+                        {{ field }}
+                        <div class="vs-input-highlight"></div>
+                    </div>
+                    {% if field.errors %}
+                    <div class="vs-error">
+                        <i class="fas fa-exclamation-circle"></i> {{ field.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="vs-submit-btn" id="submitBtn">
+                <span class="vs-btn-content">
+                    <span class="vs-btn-icon">🐾</span>
+                    <span class="vs-btn-text">Create Account</span>
+                </span>
+                <div class="vs-btn-ripple"></div>
+                <div class="vs-btn-shine"></div>
+            </button>
+        </form>
+        
+        <div class="vs-divider">
+            <span class="vs-divider-line"></span>
+            <span class="vs-divider-icon">🐾</span>
+            <span class="vs-divider-line"></span>
+        </div>
+        
+        <p class="vs-signin-link">
+            Already a member? <a href="{% url 'login' %}" class="vs-link">
+                Sign In <span class="vs-link-arrow">→</span>
+            </a>
+        </p>
+    </div>
+</div>
+
+<style>
+    /* === VETSPHERE PRO-LEVEL ANIMATIONS === */
+    
+    /* Animated gradient background */
+    .vs-bg-gradient {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: linear-gradient(-45deg, 
+            rgba(26, 10, 46, 0.15), 
+            rgba(101, 67, 33, 0.1), 
+            rgba(212, 160, 23, 0.08), 
+            rgba(26, 10, 46, 0.12)
+        );
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        z-index: 0;
+    }
+    
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        25% { background-position: 100% 50%; }
+        50% { background-position: 100% 0%; }
+        75% { background-position: 0% 100%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    /* Morphing blobs */
+    .vs-blob {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.15;
+        pointer-events: none;
+        z-index: 0;
+    }
+    .vs-blob-1 {
+        width: 400px; height: 400px;
+        background: linear-gradient(135deg, #d4a017, #f5d061);
+        top: -100px; right: -100px;
+        animation: blobFloat1 20s ease-in-out infinite;
+    }
+    .vs-blob-2 {
+        width: 350px; height: 350px;
+        background: linear-gradient(135deg, #8b6914, #d4a017);
+        bottom: -80px; left: -80px;
+        animation: blobFloat2 25s ease-in-out infinite;
+    }
+    .vs-blob-3 {
+        width: 300px; height: 300px;
+        background: linear-gradient(135deg, #b8860b, #f5d061);
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        animation: blobFloat3 18s ease-in-out infinite;
+    }
+    
+    @keyframes blobFloat1 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        25% { transform: translate(-80px, 60px) scale(1.1); }
+        50% { transform: translate(-40px, 120px) scale(0.9); }
+        75% { transform: translate(40px, 30px) scale(1.05); }
+    }
+    @keyframes blobFloat2 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(100px, -60px) scale(1.15); }
+        66% { transform: translate(50px, -100px) scale(0.85); }
+    }
+    @keyframes blobFloat3 {
+        0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+        50% { transform: translate(-50%, -50%) scale(1.2) rotate(180deg); }
+    }
+    
+    /* Floating particles */
+    #vs-particles {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+    
+    .vs-particle {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: particleRise linear infinite;
+        opacity: 0;
+    }
+    
+    @keyframes particleRise {
+        0% { opacity: 0; transform: translateY(100vh) scale(0); }
+        10% { opacity: 0.8; }
+        90% { opacity: 0.6; }
+        100% { opacity: 0; transform: translateY(-10vh) scale(1.5); }
+    }
+    
+    /* Paw trail */
+    #vs-paw-trail {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+    
+    .vs-paw-print {
+        position: absolute;
+        font-size: 18px;
+        opacity: 0;
+        animation: pawAppear 2.5s ease-out forwards;
+        filter: drop-shadow(0 0 6px rgba(212, 160, 23, 0.6));
+    }
+    
+    @keyframes pawAppear {
+        0% { opacity: 0; transform: scale(0) rotate(-20deg); }
+        15% { opacity: 0.7; transform: scale(1.2) rotate(0deg); }
+        30% { opacity: 0.5; transform: scale(1) rotate(0deg); }
+        100% { opacity: 0; transform: scale(0.8) rotate(10deg); }
+    }
+    
+    /* === CARD === */
+    .vs-register-card {
+        padding: 3rem;
+        width: 100%;
+        max-width: 900px;
+        position: relative;
+        background: rgba(var(--card-rgb, 255, 255, 255), 0.08);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 
+            0 25px 60px rgba(0, 0, 0, 0.15),
+            0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+            0 1px 0 rgba(255, 255, 255, 0.1) inset;
+        animation: cardEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+        transition: transform 0.1s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+    
+    @keyframes cardEntrance {
+        0% { opacity: 0; transform: translateY(-60px) rotateX(10deg) scale(0.9); }
+        40% { transform: translateY(8px) rotateX(-2deg) scale(1.01); }
+        70% { transform: translateY(-4px) rotateX(1deg) scale(1); }
+        100% { opacity: 1; transform: translateY(0) rotateX(0) scale(1); }
+    }
+    
+    .vs-register-card:hover {
+        box-shadow: 
+            0 30px 80px rgba(0, 0, 0, 0.2),
+            0 0 40px rgba(212, 160, 23, 0.08),
+            0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    }
+    
+    /* Animated border glow */
+    .vs-border-glow {
+        position: absolute;
+        top: -2px; left: -2px; right: -2px; bottom: -2px;
+        border-radius: 26px;
+        background: conic-gradient(
+            from var(--glow-angle, 0deg),
+            transparent 0%,
+            rgba(212, 160, 23, 0.5) 10%,
+            transparent 20%,
+            transparent 50%,
+            rgba(99, 102, 241, 0.3) 60%,
+            transparent 70%
+        );
+        animation: rotateGlow 4s linear infinite;
+        z-index: -1;
+        pointer-events: none;
+    }
+    
+    @keyframes rotateGlow {
+        0% { --glow-angle: 0deg; transform: rotate(0deg); }
+        100% { --glow-angle: 360deg; transform: rotate(360deg); }
+    }
+    
+    @property --glow-angle {
+        syntax: '<angle>';
+        initial-value: 0deg;
+        inherits: false;
+    }
+    
+    /* Corner decorations */
+    .vs-corner {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-color: rgba(212, 160, 23, 0.4);
+        border-style: solid;
+        border-width: 0;
+        opacity: 0;
+        animation: cornerReveal 0.5s ease-out forwards;
+    }
+    .vs-corner-tl { top: 12px; left: 12px; border-top-width: 2px; border-left-width: 2px; border-radius: 4px 0 0 0; animation-delay: 1.2s; }
+    .vs-corner-tr { top: 12px; right: 12px; border-top-width: 2px; border-right-width: 2px; border-radius: 0 4px 0 0; animation-delay: 1.4s; }
+    .vs-corner-bl { bottom: 12px; left: 12px; border-bottom-width: 2px; border-left-width: 2px; border-radius: 0 0 0 4px; animation-delay: 1.6s; }
+    .vs-corner-br { bottom: 12px; right: 12px; border-bottom-width: 2px; border-right-width: 2px; border-radius: 0 0 4px 0; animation-delay: 1.8s; }
+    
+    @keyframes cornerReveal {
+        from { opacity: 0; transform: scale(0.5); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    
+    /* === ICON WITH PROGRESS RING === */
+    .vs-icon-wrapper {
+        position: relative;
+        width: 120px; height: 120px;
+        margin: 0 auto 1.5rem;
+    }
+    
+    /* Outer rotating orbit ring */
+    .vs-orbit-ring {
+        position: absolute;
+        top: -10px; left: -10px;
+        width: 140px; height: 140px;
+        border: 2px dashed rgba(212, 160, 23, 0.3);
+        border-radius: 50%;
+        animation: orbitSpin 8s linear infinite;
+    }
+    
+    @keyframes orbitSpin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    /* Orbiting golden particles */
+    .vs-orbit-particle {
+        position: absolute;
+        font-size: 16px;
+        color: #f5d061;
+        text-shadow: 0 0 12px rgba(245, 208, 97, 0.9), 0 0 25px rgba(212, 160, 23, 0.5);
+        animation: orbitSpin 6s linear infinite;
+    }
+    .vs-op-1 { top: -8px; left: 50%; transform-origin: 0 68px; animation-duration: 5s; }
+    .vs-op-2 { top: 50%; right: -8px; transform-origin: -60px 0; animation-duration: 7s; animation-direction: reverse; }
+    .vs-op-3 { bottom: -8px; left: 50%; transform-origin: 0 -68px; animation-duration: 6s; }
+    .vs-op-4 { top: 50%; left: -8px; transform-origin: 68px 0; animation-duration: 8s; animation-direction: reverse; }
+    
+    .vs-progress-ring {
+        position: absolute;
+        top: 20px; left: 20px;
+        width: 80px; height: 80px;
+        transform: rotate(-90deg);
+        animation: ringSpin 12s linear infinite;
+    }
+    
+    @keyframes ringSpin {
+        from { transform: rotate(-90deg); }
+        to { transform: rotate(270deg); }
+    }
+    
+    .vs-ring-bg {
+        fill: none;
+        stroke: rgba(212, 160, 23, 0.15);
+        stroke-width: 3;
+    }
+    
+    .vs-ring-fill {
+        fill: none;
+        stroke: #d4a017;
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-dasharray: 226;
+        stroke-dashoffset: 226;
+        animation: ringDraw 2s ease-out 0.5s forwards;
+        filter: drop-shadow(0 0 8px rgba(212, 160, 23, 0.7));
+    }
+    
+    @keyframes ringDraw {
+        to { stroke-dashoffset: 56; }
+    }
+    
+    /* Center paw with rotation */
+    .vs-paw-icon {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2.2rem;
+        animation: pawFloat 3s ease-in-out infinite, pawEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+        filter: drop-shadow(0 0 15px rgba(212, 160, 23, 0.8));
+    }
+    
+    @keyframes pawFloat {
+        0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+        25% { transform: translate(-50%, -55%) scale(1.1) rotate(5deg); }
+        50% { transform: translate(-50%, -50%) scale(1.05) rotate(0deg); }
+        75% { transform: translate(-50%, -55%) scale(1.1) rotate(-5deg); }
+    }
+    
+    @keyframes pawEntrance {
+        from { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(-360deg); }
+        to { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    }
+    
+    /* Glowing pulse behind icon */
+    .vs-icon-glow {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 60px; height: 60px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(212, 160, 23, 0.4) 0%, transparent 70%);
+        animation: glowPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes glowPulse {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+        50% { transform: translate(-50%, -50%) scale(1.8); opacity: 0.15; }
+    }
+    
+    .vs-form-grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .vs-form-grid-container {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    /* === TITLE === */
+    .vs-title {
+        font-size: 2.25rem;
+        font-weight: 900;
+        color: var(--text-main);
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.05em;
+        animation: titleSlideUp 0.8s ease-out 0.6s both;
+    }
+    
+    @keyframes titleSlideUp {
+        from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+        to { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+    
+    .vs-gradient-text {
+        background: linear-gradient(135deg, #d4a017, #f5d061, #f59e0b, #d4a017);
+        background-size: 300% 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientTextFlow 4s ease-in-out infinite;
+    }
+    
+    @keyframes gradientTextFlow {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    /* Subtitle with typing effect */
+    .vs-subtitle {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        min-height: 1.6em;
+        animation: subtitleFade 0.5s ease-out 1s both;
+    }
+    
+    @keyframes subtitleFade {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .vs-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1.1em;
+        background: #d4a017;
+        margin-left: 2px;
+        vertical-align: text-bottom;
+        animation: cursorBlink 0.8s step-end infinite;
+    }
+    
+    @keyframes cursorBlink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+    
+    /* === FORM FIELDS === */
+    .vs-form-group {
+        margin-bottom: 1.4rem;
+        opacity: 0;
+        animation: fieldBounceIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    .vs-form-group:nth-child(2) { animation-delay: 1.0s; }
+    .vs-form-group:nth-child(3) { animation-delay: 1.15s; }
+    .vs-form-group:nth-child(4) { animation-delay: 1.3s; }
+    .vs-form-group:nth-child(5) { animation-delay: 1.45s; }
+    .vs-form-group:nth-child(6) { animation-delay: 1.6s; }
+    .vs-form-group:nth-child(7) { animation-delay: 1.75s; }
+    
+    @keyframes fieldBounceIn {
+        0% { opacity: 0; transform: translateY(25px) scale(0.95); }
+        60% { opacity: 1; transform: translateY(-4px) scale(1.01); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    
+    .vs-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--text-main);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: color 0.3s ease;
+    }
+    
+    .vs-input-wrapper {
+        position: relative;
+        overflow: hidden;
+        border-radius: var(--radius, 8px);
+    }
+    
+    .vs-input-wrapper input,
+    .vs-input-wrapper select,
+    .vs-input-wrapper textarea {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        border: 2px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius, 8px);
+        outline: none;
+        background: rgba(var(--card-rgb, 255, 255, 255), 0.05);
+        color: var(--text-main);
+        box-sizing: border-box;
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .vs-input-wrapper input:focus,
+    .vs-input-wrapper select:focus,
+    .vs-input-wrapper textarea:focus {
+        border-color: #d4a017;
+        background: rgba(212, 160, 23, 0.04);
+        box-shadow: 
+            0 0 0 4px rgba(212, 160, 23, 0.1),
+            0 0 20px rgba(212, 160, 23, 0.15),
+            0 0 40px rgba(212, 160, 23, 0.05);
+    }
+    
+    .vs-input-highlight {
+        position: absolute;
+        bottom: 0; left: 50%;
+        width: 0; height: 2px;
+        background: linear-gradient(90deg, #d4a017, #f5d061, #d4a017);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateX(-50%);
+    }
+    
+    .vs-input-wrapper input:focus ~ .vs-input-highlight,
+    .vs-input-wrapper select:focus ~ .vs-input-highlight {
+        width: 100%;
+    }
+    
+    .vs-error {
+        color: var(--alert-error-text, #ef4444);
+        font-size: 0.8rem;
+        margin-top: 0.4rem;
+        font-weight: 600;
+        animation: errorShake 0.5s ease-out;
+    }
+    
+    @keyframes errorShake {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-5px); }
+        40% { transform: translateX(5px); }
+        60% { transform: translateX(-3px); }
+        80% { transform: translateX(3px); }
+    }
+    
+    /* === SUBMIT BUTTON === */
+    .vs-submit-btn {
+        width: 100%;
+        padding: 1.1rem;
+        margin-top: 1.5rem;
+        font-size: 1.1rem;
+        font-weight: 800;
+        border: none;
+        border-radius: 14px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #d4a017, #f59e0b, #d4a017);
+        background-size: 200% 200%;
+        color: #fff;
+        animation: btnSlideUp 0.6s ease-out 2s both, btnGradient 3s ease-in-out infinite;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 20px rgba(212, 160, 23, 0.3);
+    }
+    
+    @keyframes btnSlideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes btnGradient {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    .vs-submit-btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 35px rgba(212, 160, 23, 0.45), 0 0 60px rgba(212, 160, 23, 0.15);
+    }
+    
+    .vs-submit-btn:active {
+        transform: translateY(-1px) scale(0.99);
+    }
+    
+    .vs-btn-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .vs-btn-icon {
+        font-size: 1.3rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .vs-submit-btn:hover .vs-btn-icon {
+        animation: pawWiggle 0.5s ease-in-out;
+    }
+    
+    @keyframes pawWiggle {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(-15deg); }
+        75% { transform: rotate(15deg); }
+    }
+    
+    .vs-btn-shine {
+        position: absolute;
+        top: 0; left: -100%;
+        width: 50%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+        transform: skewX(-25deg);
+        animation: btnShine 3s ease-in-out infinite;
+    }
+    
+    @keyframes btnShine {
+        0%, 70% { left: -100%; }
+        100% { left: 150%; }
+    }
+    
+    /* Ripple effect */
+    .vs-btn-ripple {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 0; height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s, opacity 0.6s;
+        opacity: 0;
+    }
+    
+    .vs-submit-btn:active .vs-btn-ripple {
+        width: 400px; height: 400px;
+        opacity: 1;
+        transition: width 0s, height 0s, opacity 0s;
+    }
+    
+    /* === DIVIDER === */
+    .vs-divider {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-top: 2rem;
+        opacity: 0;
+        animation: fadeIn 0.5s ease-out 2.3s both;
+    }
+    
+    .vs-divider-line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(212, 160, 23, 0.3), transparent);
+    }
+    
+    .vs-divider-icon {
+        font-size: 0.9rem;
+        opacity: 0.5;
+        animation: dividerPawSpin 8s linear infinite;
+    }
+    
+    @keyframes dividerPawSpin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    /* === SIGN IN LINK === */
+    .vs-signin-link {
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-top: 1rem;
+        opacity: 0;
+        animation: fadeIn 0.5s ease-out 2.5s both;
+    }
+    
+    .vs-link {
+        color: #d4a017;
+        text-decoration: none;
+        font-weight: 800;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .vs-link::after {
+        content: '';
+        position: absolute;
+        bottom: -2px; left: 0;
+        width: 0; height: 2px;
+        background: linear-gradient(90deg, #d4a017, #f5d061);
+        transition: width 0.3s ease;
+    }
+    
+    .vs-link:hover::after {
+        width: 100%;
+    }
+    
+    .vs-link-arrow {
+        display: inline-block;
+        transition: transform 0.3s ease;
+    }
+    
+    .vs-link:hover .vs-link-arrow {
+        transform: translateX(5px);
+    }
+    
+    /* Sparkle cursor trail */
+    .vs-sparkle {
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        animation: sparkleFloat 1s ease-out forwards;
+    }
+    
+    @keyframes sparkleFloat {
+        0% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+        50% { opacity: 0.8; }
+        100% { opacity: 0; transform: scale(0) translateY(-40px) rotate(360deg); }
+    }
+    
+    /* === RESPONSIVE === */
+    @media (max-width: 600px) {
+        .vs-register-card { padding: 2rem 1.5rem; margin: 0 1rem; }
+        .vs-title { font-size: 1.8rem; }
+        .vs-blob { display: none; }
+    }
+</style>
+
+<script>
+(function() {
+    // === TYPING EFFECT ===
+    const text = "🐾 Precision Care for Your Perfect Companion ✨";
+    const el = document.getElementById('typingText');
+    let i = 0;
+    const cursor = document.createElement('span');
+    cursor.className = 'vs-cursor';
+    
+    function typeChar() {
+        if (i < text.length) {
+            el.textContent = text.slice(0, i + 1);
+            el.appendChild(cursor);
+            i++;
+            setTimeout(typeChar, 50 + Math.random() * 40);
+        }
+    }
+    setTimeout(typeChar, 1200);
+    
+    // === 3D TILT EFFECT ===
+    const card = document.getElementById('tiltCard');
+    card.addEventListener('mousemove', function(e) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
+    });
+    card.addEventListener('mouseleave', function() {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+    });
+    
+    // === FLOATING PARTICLES ===
+    const particleContainer = document.getElementById('vs-particles');
+    const colors = ['#d4a017', '#f5d061', '#f59e0b', '#fbbf24', '#b8860b', '#e6b422'];
+    
+    function createParticle() {
+        const p = document.createElement('div');
+        p.className = 'vs-particle';
+        const size = Math.random() * 6 + 3;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        p.style.cssText = `
+            width: ${size}px; height: ${size}px;
+            left: ${Math.random() * 100}%;
+            background: ${color};
+            box-shadow: 0 0 ${size * 2}px ${color};
+            animation-duration: ${Math.random() * 8 + 6}s;
+            animation-delay: ${Math.random() * 4}s;
+        `;
+        particleContainer.appendChild(p);
+        setTimeout(() => p.remove(), 15000);
+    }
+    
+    setInterval(createParticle, 400);
+    for (let j = 0; j < 12; j++) setTimeout(createParticle, j * 200);
+    
+    // === WALKING PAW PRINTS ===
+    const pawTrail = document.getElementById('vs-paw-trail');
+    let pawX = -50, pawY = window.innerHeight + 50;
+    let pawStep = 0;
+    
+    function createPawPrint() {
+        if (pawY < -50) {
+            pawX = Math.random() * window.innerWidth;
+            pawY = window.innerHeight + 50;
+        }
+        const paw = document.createElement('span');
+        paw.className = 'vs-paw-print';
+        paw.textContent = '🐾';
+        const offsetX = pawStep % 2 === 0 ? -15 : 15;
+        pawX += offsetX + (Math.random() * 20);
+        pawY -= 50 + Math.random() * 20;
+        const rotation = pawStep % 2 === 0 ? -25 : 25;
+        paw.style.cssText = `left: ${pawX}px; top: ${pawY}px; transform: rotate(${rotation}deg);`;
+        pawTrail.appendChild(paw);
+        pawStep++;
+        setTimeout(() => paw.remove(), 2500);
+    }
+    
+    setInterval(createPawPrint, 700);
+    
+    // === SPARKLE CURSOR TRAIL ===
+    const sparkleEmojis = ['✦', '✧', '🐾', '✨', '⭐'];
+    let lastSparkle = 0;
+    
+    document.addEventListener('mousemove', function(e) {
+        if (Date.now() - lastSparkle < 100) return;
+        lastSparkle = Date.now();
+        
+        const s = document.createElement('span');
+        s.className = 'vs-sparkle';
+        s.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
+        s.style.cssText = `left: ${e.clientX}px; top: ${e.clientY}px; font-size: ${10 + Math.random() * 8}px;`;
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 1000);
+    });
+    
+    // === RIPPLE ON BUTTON ===
+    const btn = document.getElementById('submitBtn');
+    btn.addEventListener('click', function(e) {
+        const ripple = btn.querySelector('.vs-btn-ripple');
+        ripple.style.width = '0';
+        ripple.style.height = '0';
+        ripple.style.opacity = '0';
+        void ripple.offsetWidth;
+        ripple.style.transition = 'none';
+        ripple.style.width = '0';
+        ripple.style.height = '0';
+        ripple.style.opacity = '1';
+        requestAnimationFrame(() => {
+            ripple.style.transition = 'width 0.6s, height 0.6s, opacity 0.6s';
+            ripple.style.width = '600px';
+            ripple.style.height = '600px';
+            ripple.style.opacity = '0';
+        });
+    });
+})();
+</script>
+{% endblock %}

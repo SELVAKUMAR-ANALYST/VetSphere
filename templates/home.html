@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}VetSphere – Digital Veterinary Care Platform{% endblock %}
+
+{% block content %}
+<!-- ═══════ HERO BANNER ═══════ -->
+<section class="hero-banner" style="min-height: clamp(600px, 90vh, 900px); display: flex; align-items: center; padding: clamp(2rem, 8vw, 6rem) 0;">
+    <div class="hero-content fade-in" style="flex: 1; min-width: 0;">
+        <div class="hero-badge"
+            style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: var(--primary); padding: 0.5rem 1.25rem; border-radius: var(--radius-full); font-weight: 700; font-size: 0.85rem; width: fit-content; margin-bottom: clamp(1rem, 3vw, 2rem); letter-spacing: 0.05em; text-transform: uppercase;">
+            <i class="fas fa-sparkles" style="margin-right: 0.5rem;"></i> Next-Gen Veterinary Platform
+        </div>
+
+        <h1 class="hero-title"
+            style="font-size: clamp(3rem, 8vw, 5rem); font-weight: 900; line-height: 0.95; letter-spacing: -0.06em; margin-bottom: 2rem; color: var(--text-main);">
+            VetSphere <br><span class="text-highlight">Smarter Care</span><br>for Your Pets
+        </h1>
+
+        <p class="hero-subtitle-detailed"
+            style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; line-height: 1.6; margin-bottom: 3rem;">
+            Automate your pet care business with our world-class SaaS platform.
+            Invoicing, bookings, and CRM — all in one elegant ecosystem.
+        </p>
+
+        <div class="hero-cta-group" style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+            <a href="{% url 'register' %}" class="btn btn-primary shimmer pulse-glow"
+                style="padding: 1.25rem 2.5rem; border-radius: var(--radius-lg); font-size: 1.1rem; font-weight: 800;">
+                <i class="fas fa-rocket"></i> Experience Excellence
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-secondary-dark glass-card"
+                style="padding: 1.25rem 2.5rem; border-radius: var(--radius-lg); font-size: 1.1rem; font-weight: 800; border-color: rgba(255,255,255,0.2);">
+                <i class="fas fa-sign-in-alt"></i> Customer Login
+            </a>
+        </div>
+    </div>
+
+    <!-- CINEMATIC RIGHT COLUMN -->
+    <div class="hero-image-container parallax-layer fade-in" style="animation-delay: 0.3s; position: relative;" data-parallax-speed="0.04">
+        <div class="hero-visual-wrapper" style="position: relative; z-index: 1;">
+            <div style="width: 100%; height: 100%; border-radius: var(--radius-2xl); overflow: hidden;">
+                <img src="{% static 'images/hermione_cat.png' %}" alt="Premium Pet Care" class="hero-visual"
+                    style="display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.2); transition: transform 0.5s var(--ease);">
+            </div>
+        </div>
+        <!-- Decorative Glow -->
+        <div
+            style="position: absolute; top: 10%; right: -10%; width: 300px; height: 300px; background: var(--primary); filter: blur(120px); opacity: 0.2; border-radius: 50%; z-index: 0;">
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ WHY CHOOSE US ═══════ -->
+<section style="padding: clamp(4rem, 10vw, 10rem) 0; position: relative;">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(2rem, 5vw, 6rem); align-items: center;">
+            <!-- Left Image Column -->
+            <div class="fade-in" style="position: relative; width: 100%;">
+                <div class="glass-card hover-reveal-card" style="padding: 1rem; border-radius: var(--radius-2xl);">
+                    <img src="{% static 'images/cat_playing_with_yarn.png' %}" alt="Quality Care"
+                        style="width: 100%; border-radius: var(--radius-xl); object-fit: cover; display: block;">
+                </div>
+                <!-- Floating Info Badge -->
+                <div class="glass-card hover-lift"
+                    style="position: absolute; bottom: -2rem; right: -2rem; padding: 1.5rem; border-radius: var(--radius-lg); background: var(--nav-bg); color: white;">
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--primary); line-height: 1;">99%</div>
+                    <div style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Owner Satisfaction
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content Column -->
+            <div class="fade-in" style="animation-delay: 0.2s;">
+                <span
+                    style="color: var(--primary); font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.2em; display: block; margin-bottom: 1rem;">Experience
+                    Excellence</span>
+                <h2
+                    style="font-size: 3.5rem; font-weight: 900; color: var(--text-main); line-height: 0.95; margin-bottom: 2rem; letter-spacing: -0.04em;">
+                    Advanced Care for <br>a <span class="text-highlight">Better Life</span>
+                </h2>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+                    <div class="glass-card hover-reveal-card" style="padding: 1.5rem;">
+                        <i class="fas fa-stethoscope"
+                            style="color: var(--primary); font-size: 1.5rem; margin-bottom: 1rem;"></i>
+                        <h4 style="font-weight: 800; margin-bottom: 0.5rem;">Expert Doctors</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">The most experienced team in the
+                            region.</p>
+                    </div>
+                    <div class="glass-card hover-reveal-card" style="padding: 1.5rem;">
+                        <i class="fas fa-microscope"
+                            style="color: var(--primary); font-size: 1.5rem; margin-bottom: 1rem;"></i>
+                        <h4 style="font-weight: 800; margin-bottom: 0.5rem;">Modern Tech</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Cutting-edge diagnostic equipment.</p>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+                    <a href="{% url 'register' %}" class="btn btn-primary shimmer pulse-glow"
+                        style="padding: 1rem 2rem; border-radius: var(--radius-lg); font-weight: 800;">Get Started
+                        Now</a>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div
+                            style="width: 45px; height: 45px; border-radius: 50%; background: var(--card-bg); display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); color: var(--primary);">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Support Line
+                            </div>
+                            <div style="font-weight: 800; color: var(--text-main);">93602 26522</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Banner -->
+<div class="glass-card fade-in shimmer"
+    style="padding: 5rem; text-align: center; margin-bottom: 8rem; border-color: var(--primary);">
+    <h2
+        style="font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 1.5rem; color: var(--text-main);">
+        Ready to Unlock <span class="text-highlight">Elite Care</span>?</h2>
+    <p
+        style="color: var(--text-muted); font-size: 1.15rem; margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.8;">
+        Book an appointment with our specialist consultants today and join the future of pet health management.</p>
+    <a href="{% url 'register' %}" class="btn btn-primary shimmer pulse-glow"
+        style="padding: 1.25rem 2.5rem; border-radius: var(--radius-lg); font-size: 1.1rem; font-weight: 800;">
+        <i class="fas fa-calendar-alt"></i> Book a Consultation
+    </a>
+</div>
+
+<!-- ═══════ FEATURE CARDS ═══════ -->
+<section style="padding-bottom: clamp(4rem, 10vw, 10rem);">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: clamp(2rem, 5vw, 5rem);">
+            <h2 style="font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; letter-spacing: -0.04em;">Our <span
+                    class="text-highlight">Capabilities</span></h2>
+            <p style="color: var(--text-muted); font-size: clamp(0.9rem, 1.2vw, 1.1rem);">Powerful tools for the modern pet owner.</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem;">
+            <div class="glass-card hover-reveal-card shimmer fade-in" style="padding: clamp(1.5rem, 5vw, 3rem);">
+                <div
+                    style="width: 4rem; height: 4rem; border-radius: var(--radius-lg); background: var(--primary-light); display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;">
+                    <i class="fas fa-calendar-check" style="font-size: 1.75rem; color: var(--primary);"></i>
+                </div>
+                <h3 style="font-weight: 900; margin-bottom: 1rem; font-size: 1.5rem; letter-spacing: -0.02em;">Smart
+                    Bookings</h3>
+                <p style="color: var(--text-muted); line-height: 1.7; font-size: 1rem;">Next-gen appointment scheduling
+                    with real-time availability and reminders.</p>
+            </div>
+
+            <div class="glass-card hover-reveal-card shimmer fade-in" style="padding: 3rem; animation-delay: 0.15s;">
+                <div
+                    style="width: 4rem; height: 4rem; border-radius: var(--radius-lg); background: var(--accent-light); display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;">
+                    <i class="fas fa-file-invoice-dollar" style="font-size: 1.75rem; color: var(--accent);"></i>
+                </div>
+                <h3 style="font-weight: 900; margin-bottom: 1rem; font-size: 1.5rem; letter-spacing: -0.02em;">Digital
+                    Billing</h3>
+                <p style="color: var(--text-muted); line-height: 1.7; font-size: 1rem;">Seamless automated invoicing
+                    with secure digital payment processing.</p>
+            </div>
+
+            <div class="glass-card hover-reveal-card shimmer fade-in" style="padding: 3rem; animation-delay: 0.3s;">
+                <div
+                    style="width: 4rem; height: 4rem; border-radius: var(--radius-lg); background: rgba(99, 102, 241, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;">
+                    <i class="fas fa-paw" style="font-size: 1.75rem; color: #6366F1;"></i>
+                </div>
+                <h3
+                    style="font-weight: 900; margin-bottom: 1rem; font-size: 1.5rem; letter-spacing: -0.02em; color: var(--text-main);">
+                    Pet CRM</h3>
+                <p style="color: var(--text-muted); line-height: 1.7; font-size: 1rem;">Full health history and activity
+                    tracking for all your pets in one beautiful dashboard.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ── Parallax Scroll Effect ──
+    const parallaxLayers = document.querySelectorAll('.parallax-layer');
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        parallaxLayers.forEach(el => {
+            const speed = parseFloat(el.dataset.parallaxSpeed || 0.05);
+            el.style.transform = `translateY(${scrollY * speed}px)`;
+        });
+    });
+
+    // ── Magnetic Button Effect ──
+    document.querySelectorAll('.pulse-glow').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px) scale(1.04)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0, 0) scale(1)';
+            btn.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        });
+        btn.addEventListener('mouseenter', () => {
+            btn.style.transition = 'transform 0.1s ease';
+        });
+    });
+
+    // ── Card 3D Tilt Effect ──
+    document.querySelectorAll('.hover-reveal-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            card.style.transform = `translateY(-12px) scale(1.02) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+            card.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2)';
+        });
+        card.addEventListener('mouseenter', () => {
+            card.style.transition = 'transform 0.1s ease';
+        });
+    });
+</script>
+{% endblock %}

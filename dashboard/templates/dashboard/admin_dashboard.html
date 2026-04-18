@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Insight – VetSphere Enterprise{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
+        <div>
+            <h1 style="font-size: 2.75rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 0.5rem; color: var(--text-main); line-height: 1.1; background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Admin Intelligence</h1>
+            <p style="color: var(--text-muted); font-size: 1.15rem; font-weight: 500;">Real-time system health and analytics overview.</p>
+        </div>
+        <div style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
+            <a href="{% url 'admin_user_list' %}" class="btn btn-secondary hover-lift"><i class="fas fa-users-cog"></i> Manage Users</a>
+            <a href="{% url 'admin_message_list' %}" class="btn btn-primary shimmer hover-lift"><i class="fas fa-inbox"></i> Inquiries ({{ total_messages }})</a>
+        </div>
+    </div>
+
+    <!-- Metric Cards - Premium Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <!-- Users -->
+        <div class="glass-card hover-lift" style="padding: 1.75rem; position: relative; overflow: hidden; border-left: 4px solid #6366F1;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h3 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.75rem; color: var(--text-muted); font-weight: 700;">Active Accounts</h3>
+                    <p style="font-size: 2.25rem; font-weight: 900; margin: 0; color: var(--text-main); letter-spacing: -0.03em;">{{ total_users }}</p>
+                </div>
+                <div style="width: 3.5rem; height: 3.5rem; border-radius: var(--radius-lg); background: rgba(99, 102, 241, 0.1); display: flex; align-items: center; justify-content: center; color: #6366F1; font-size: 1.5rem; box-shadow: 0 8px 16px -4px rgba(99, 102, 241, 0.2);">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+            </div>
+            <div style="margin-top: 1.25rem; border-top: 1px solid var(--border-light); padding-top: 1rem;">
+                <a href="{% url 'admin_user_list' %}" style="font-size: 0.8rem; color: #6366F1; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">Manage User Directory <i class="fas fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+            </div>
+        </div>
+
+        <!-- Pets -->
+        <div class="glass-card hover-lift" style="padding: 1.75rem; position: relative; overflow: hidden; border-left: 4px solid var(--primary);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h3 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.75rem; color: var(--text-muted); font-weight: 700;">Managed Pets</h3>
+                    <p style="font-size: 2.25rem; font-weight: 900; margin: 0; color: var(--text-main); letter-spacing: -0.03em;">{{ total_pets }}</p>
+                </div>
+                <div style="width: 3.5rem; height: 3.5rem; border-radius: var(--radius-lg); background: var(--primary-light); display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem; box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.25);">
+                    <i class="fas fa-paw"></i>
+                </div>
+            </div>
+            <div style="margin-top: 1.25rem; border-top: 1px solid var(--border-light); padding-top: 1rem;">
+                <a href="{% url 'admin_pet_list' %}" style="font-size: 0.8rem; color: var(--primary); text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">View Pet Registry <i class="fas fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+            </div>
+        </div>
+
+        <!-- Bookings -->
+        <div class="glass-card hover-lift" style="padding: 1.75rem; position: relative; overflow: hidden; border-left: 4px solid #F59E0B;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h3 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.75rem; color: var(--text-muted); font-weight: 700;">Total Bookings</h3>
+                    <p style="font-size: 2.25rem; font-weight: 900; margin: 0; color: var(--text-main); letter-spacing: -0.03em;">{{ total_bookings }}</p>
+                </div>
+                <div style="width: 3.5rem; height: 3.5rem; border-radius: var(--radius-lg); background: rgba(245, 158, 11, 0.1); display: flex; align-items: center; justify-content: center; color: #F59E0B; font-size: 1.5rem; box-shadow: 0 8px 16px -4px rgba(245, 158, 11, 0.25);">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+            </div>
+            <div style="margin-top: 1.25rem; border-top: 1px solid var(--border-light); padding-top: 1rem;">
+                <a href="{% url 'booking_list' %}" style="font-size: 0.8rem; color: #F59E0B; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">Appointment Monitor <i class="fas fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+            </div>
+        </div>
+
+        <!-- Revenue -->
+        <div class="glass-card hover-lift" style="padding: 1.75rem; position: relative; overflow: hidden; background: var(--gradient-primary); border: none; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h3 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.75rem; color: rgba(255,255,255,0.8); font-weight: 700;">Total Revenue</h3>
+                    <p style="font-size: 2.25rem; font-weight: 950; margin: 0; color: white; letter-spacing: -0.04em;">₹{{ total_revenue|floatformat:0 }}</p>
+                </div>
+                <div style="width: 3.5rem; height: 3.5rem; border-radius: var(--radius-lg); background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.75rem; backdrop-filter: blur(8px);">
+                    <i class="fas fa-rupee-sign"></i>
+                </div>
+            </div>
+            <div style="margin-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1rem;">
+                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.9); font-weight: 700; display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-chart-line"></i> +12% from last month</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Section -->
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="glass-card" style="padding: 2.25rem; height: 420px; display: flex; flex-direction: column;">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; background: transparent; border: none; padding: 0; outline: none !important; height: auto; box-shadow: none;">
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em;">Booking Velocity</h3>
+                <span style="font-size: 0.75rem; font-weight: 700; background: var(--bg-subtle); padding: 0.35rem 0.75rem; border-radius: var(--radius-full); color: var(--text-muted);">LAST 7 DAYS</span>
+            </header>
+            <div style="flex: 1; position: relative; width: 100%;">
+                <canvas id="bookingsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="glass-card" style="padding: 2.25rem; height: 420px; display: flex; flex-direction: column;">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; background: transparent; border: none; padding: 0; outline: none !important; height: auto; box-shadow: none;">
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em;">Revenue Streams</h3>
+                <span style="font-size: 0.75rem; font-weight: 700; background: var(--bg-subtle); padding: 0.35rem 0.75rem; border-radius: var(--radius-full); color: var(--text-muted);">MONTHLY TREND</span>
+            </header>
+            <div style="flex: 1; position: relative; width: 100%;">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.5rem; margin-bottom: 3rem;">
+        <!-- Distribution Charts -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="glass-card" style="padding: 1.75rem; height: 100%; display: flex; flex-direction: column;">
+                <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem;">Service Distribution</h3>
+                <div style="flex: 1; position: relative; display: flex; align-items: center; justify-content: center;">
+                    <canvas id="servicesChart"></canvas>
+                </div>
+            </div>
+            <div class="glass-card" style="padding: 1.75rem; height: 100%; display: flex; flex-direction: column;">
+                <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem;">Pet Demographics</h3>
+                <div style="flex: 1; position: relative; display: flex; align-items: center; justify-content: center;">
+                    <canvas id="petsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Schedule -->
+        <div class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="padding: 1.75rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);">Daily Schedule</h3>
+                <span class="badge" style="background: var(--primary-light); color: var(--primary); font-size: 0.7rem; font-weight: 700;">{{ todays_appointments|length }} APPOINTMENTS TODAY</span>
+            </div>
+            <div style="flex: 1; overflow-y: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: var(--bg-subtle);">
+                            <th style="padding: 1rem; text-align: left; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border);">Patient</th>
+                            <th style="padding: 1rem; text-align: left; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border);">Service</th>
+                            <th style="padding: 1rem; text-align: left; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border);">Time</th>
+                            <th style="padding: 1rem; text-align: right; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border);">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in todays_appointments %}
+                        <tr style="border-bottom: 1px solid var(--border-light); transition: background 0.2s;" onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1.25rem 1rem;">
+                                <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">{{ booking.pet.name }}</div>
+                                <div style="font-size: 0.75rem; color: var(--text-faint);">{{ booking.pet.breed }}</div>
+                            </td>
+                            <td style="padding: 1.25rem 1rem;">
+                                <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">{{ booking.service.name }}</span>
+                            </td>
+                            <td style="padding: 1.25rem 1rem;">
+                                <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-main);">{{ booking.start_time|date:"h:i A" }}</div>
+                            </td>
+                            <td style="padding: 1.25rem 1rem; text-align: right;">
+                                <a href="{% url 'booking_list' %}" class="btn btn-sm" style="background: var(--primary-light); color: var(--primary); font-weight: 700; font-size: 0.7rem; border-radius: var(--radius-sm)">TRACK</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" style="padding: 4rem 2rem; text-align: center;">
+                                <div style="background: var(--bg-subtle); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+                                    <i class="fas fa-calendar-day fa-lg" style="color: var(--text-faint);"></i>
+                                </div>
+                                <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 500;">No appointments scheduled for today.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{{ chart_labels|json_script:"chart-labels" }}
+{{ chart_data|json_script:"chart-data" }}
+{{ service_labels|json_script:"service-labels" }}
+{{ service_data|json_script:"service-data" }}
+{{ pet_labels|json_script:"pet-labels" }}
+{{ pet_data|json_script:"pet-data" }}
+{{ revenue_labels|json_script:"revenue-labels" }}
+{{ revenue_data|json_script:"revenue-data" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const labels = JSON.parse(document.getElementById('chart-labels').textContent);
+        const data = JSON.parse(document.getElementById('chart-data').textContent);
+        const sLabels = JSON.parse(document.getElementById('service-labels').textContent);
+        const sData = JSON.parse(document.getElementById('service-data').textContent);
+        const pLabels = JSON.parse(document.getElementById('pet-labels').textContent);
+        const pData = JSON.parse(document.getElementById('pet-data').textContent);
+        const rLabels = JSON.parse(document.getElementById('revenue-labels').textContent);
+        const rData = JSON.parse(document.getElementById('revenue-data').textContent);
+
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+        const textColor = isDark ? '#94A3B8' : '#64748B';
+        const brandColors = ['#10B981', '#3B82F6', '#F59E0B', '#6366F1', '#EC4899', '#14B8A6'];
+        
+        const baseOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { 
+                    beginAtZero: true, 
+                    ticks: { color: textColor, font: { size: 10, family: 'Inter', weight: '500' } }, 
+                    grid: { color: gridColor, drawBorder: false } 
+                },
+                x: { 
+                    ticks: { color: textColor, font: { size: 10, family: 'Inter', weight: '500' } }, 
+                    grid: { display: false } 
+                }
+            }
+        };
+
+        // 1. Bookings Trend
+        const ctxBooking = document.getElementById('bookingsChart').getContext('2d');
+        const bookingGradient = ctxBooking.createLinearGradient(0, 0, 0, 400);
+        bookingGradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+        bookingGradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+        new Chart(ctxBooking, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    borderColor: '#10B981',
+                    borderWidth: 3,
+                    tension: 0.45,
+                    fill: true,
+                    backgroundColor: bookingGradient,
+                    pointBackgroundColor: '#10B981',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: baseOptions
+        });
+
+        // 2. Monthly Revenue
+        const ctxRev = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctxRev, {
+            type: 'bar',
+            data: {
+                labels: rLabels,
+                datasets: [{
+                    data: rData,
+                    backgroundColor: '#F59E0B',
+                    borderRadius: 4,
+                    barPercentage: 0.5
+                }]
+            },
+            options: baseOptions
+        });
+
+        // 3. Service Popularity
+        const ctxServ = document.getElementById('servicesChart').getContext('2d');
+        new Chart(ctxServ, {
+            type: 'doughnut',
+            data: {
+                labels: sLabels,
+                datasets: [{
+                    data: sData,
+                    backgroundColor: brandColors,
+                    borderWidth: 0,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: { 
+                        display: true, 
+                        position: 'bottom', 
+                        labels: { color: textColor, padding: 20, usePointStyle: true, font: { size: 11, family: 'Inter', weight: '600' } } 
+                    }
+                }
+            }
+        });
+
+        // 4. Pet Demographics
+        const ctxPets = document.getElementById('petsChart').getContext('2d');
+        new Chart(ctxPets, {
+            type: 'pie',
+            data: {
+                labels: pLabels,
+                datasets: [{
+                    data: pData,
+                    backgroundColor: brandColors.reverse(),
+                    borderWidth: 0,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        display: true, 
+                        position: 'bottom', 
+                        labels: { color: textColor, padding: 20, usePointStyle: true, font: { size: 11, family: 'Inter', weight: '600' } } 
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

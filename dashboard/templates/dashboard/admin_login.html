@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Staff Portal Login - VetSphere{% endblock %}
+
+{% block content %}
+<div style="min-height: 75vh; display: flex; align-items: center; justify-content: center; padding: 2rem;">
+    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-2xl); padding: 3rem; width: 100%; max-width: 440px; box-shadow: var(--shadow-lg); animation: popUp 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);">
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <div style="width: 56px; height: 56px; background: var(--secondary); color: white; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin: 0 auto 1.25rem; box-shadow: 0 8px 20px rgba(19, 78, 74, 0.3);">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem; letter-spacing: -0.02em;">Staff Portal</h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Secure Access for Staff & Administrators</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div style="background: var(--alert-error-bg); border-left: 4px solid var(--alert-error-text); padding: 0.85rem 1rem; border-radius: var(--radius); margin-bottom: 1.5rem; color: var(--alert-error-text); font-size: 0.88rem;">
+                {% for error in form.non_field_errors %}
+                <p style="margin: 0;"><i class="fas fa-exclamation-circle"></i> {{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% for field in form %}
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem;">{{ field.label }}</label>
+                <div style="position: relative;">
+                    {% if field.field.widget.input_type == 'password' %}
+                        <i class="fas fa-lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--primary); opacity: 0.5; font-size: 0.85rem;"></i>
+                        <input type="password" name="{{ field.name }}" id="{{ field.id_for_label }}"
+                            style="width: 100%; padding: 0.85rem 2.75rem; border: 1.5px solid var(--input-border); border-radius: var(--radius); font-size: 0.9rem; background: var(--input-bg); color: var(--text-main); font-family: inherit; box-sizing: border-box;"
+                            placeholder="••••••••" required>
+                        <button type="button" onclick="togglePw('{{ field.id_for_label }}', this)"
+                            style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0.35rem; font-size: 0.9rem;">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    {% else %}
+                        <i class="fas fa-user" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--primary); opacity: 0.5; font-size: 0.85rem;"></i>
+                        <input type="text" name="{{ field.name }}" id="{{ field.id_for_label }}"
+                            style="width: 100%; padding: 0.85rem 1rem 0.85rem 2.75rem; border: 1.5px solid var(--input-border); border-radius: var(--radius); font-size: 0.9rem; background: var(--input-bg); color: var(--text-main); font-family: inherit; box-sizing: border-box;"
+                            placeholder="Username" required>
+                    {% endif %}
+                </div>
+                {% if field.errors %}
+                <span style="color: var(--alert-error-text); font-size: 0.8rem; margin-top: 0.25rem; display: block;">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn" style="width: 100%; background: var(--secondary); color: white; border: none; padding: 1rem; font-size: 0.95rem; font-weight: 700; margin-top: 1.5rem; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; border-radius: var(--radius); transition: all var(--duration) var(--ease);"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 28px rgba(19, 78, 74, 0.3)'"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <span>Sign In</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p style="color: var(--text-faint); font-size: 0.78rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                <i class="fas fa-lock" style="font-size: 0.65rem;"></i> Authorized personnel only. All access is logged.
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes popUp {
+        from { transform: scale(0.92); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+</style>
+
+<script>
+    function togglePw(id, btn) {
+        const inp = document.getElementById(id);
+        const icon = btn.querySelector('i');
+        if (inp.type === 'password') { inp.type = 'text'; icon.classList.replace('fa-eye', 'fa-eye-slash'); }
+        else { inp.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
+    }
+</script>
+{% endblock %}

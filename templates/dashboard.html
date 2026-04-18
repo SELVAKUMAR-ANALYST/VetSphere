@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - VetSphere{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="fade-in">
+    <!-- Welcome Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
+        <div>
+            <h1 style="font-size: 2.75rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 0.5rem; color: var(--text-main); line-height: 1.1;">Welcome back, <span style="background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ user.username }}</span>!</h1>
+            <p style="color: var(--text-muted); font-size: 1.15rem; font-weight: 500;">Your VetSphere command center is ready.</p>
+        </div>
+        <div style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
+            {% if not user.is_staff %}
+            <a href="{% url 'profile_settings' %}" class="btn btn-secondary hover-lift" style="padding: 0.85rem 1.5rem; border-radius: var(--radius-lg);">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+            {% endif %}
+            <a href="{% url 'booking_create' %}" class="btn btn-primary shimmer hover-lift" style="padding: 0.85rem 2rem; border-radius: var(--radius-lg);">
+                <i class="fas fa-calendar-plus"></i> New Booking
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Stats Metric Row -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid var(--primary);">
+            <p style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Total Pets</p>
+            <h3 style="font-size: 1.75rem; font-weight: 900;">{{ pets.count }}</h3>
+        </div>
+        <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid var(--accent);">
+            <p style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Total Bookings</p>
+            <h3 style="font-size: 1.75rem; font-weight: 900;">{{ recent_bookings.count }}</h3>
+        </div>
+        <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #3b82f6;">
+            <p style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Active Records</p>
+            <h3 style="font-size: 1.75rem; font-weight: 900;">{{ health_logs_count|default:"--" }}</h3>
+        </div>
+    </div>
+
+    <!-- Top row: Health + Gallery -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        
+        <!-- Health Dashboards & Alerts -->
+        <div class="glass-card hover-lift" style="padding: 2rem;">
+            <h2 style="font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; letter-spacing: -0.02em;">
+                <div style="width: 2.5rem; height: 2.5rem; border-radius: var(--radius-md); background: rgba(239, 68, 68, 0.1); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);">
+                    <i class="fas fa-heartbeat" style="color: #EF4444; font-size: 1rem;"></i>
+                </div>
+                Health Alerts
+            </h2>
+
+            {% if alerts %}
+            <div class="status-alert" style="background: var(--alert-error-bg); border: 1px solid var(--alert-error-border); padding: 1.15rem; border-radius: var(--radius); display: flex; align-items: flex-start; gap: 0.75rem; color: var(--alert-error-text);">
+                <i class="fas fa-exclamation-triangle" style="color: var(--alert-error-text); font-size: 1.15rem; margin-top: 0.15rem;"></i>
+                <div>
+                    <h3 style="color: var(--alert-error-text); font-weight: 700; margin-bottom: 0.35rem; font-size: 0.9rem;">Attention Required</h3>
+                    <ul style="margin: 0; padding-left: 1rem; color: var(--alert-error-text); font-size: 0.85rem;">
+                        {% for alert in alerts %}
+                        <li style="margin-bottom: 0.2rem;">
+                            <strong>{{ alert.pet.name }}</strong>: {{ alert.name }} is due on {{ alert.expiry_date|date:"M j, Y" }}
+                            {% if alert.expiry_date < today %}<span style="background: var(--alert-error-text); color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem; font-weight: 700; margin-left: 0.35rem;">OVERDUE</span>{% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% else %}
+            <div class="status-alert" style="background: var(--alert-success-bg); border: 1px solid var(--alert-success-border); padding: 1.15rem; border-radius: var(--radius); display: flex; align-items: center; gap: 0.75rem; color: var(--alert-success-text);">
+                <i class="fas fa-check-circle" style="font-size: 1.15rem;"></i>
+                <div>
+                    <h3 style="font-weight: 700; margin-bottom: 0.15rem; font-size: 0.9rem;">All Good!</h3>
+                    <p style="margin: 0; font-size: 0.85rem;">Your pets are up to date on all vaccinations.</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Pet Photo Gallery -->
+        {% if pets %}
+        <div class="glass-card hover-lift" style="padding: 2rem;">
+            <h2 style="font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; letter-spacing: -0.02em;">
+                <div style="width: 2.5rem; height: 2.5rem; border-radius: var(--radius-md); background: var(--primary-light); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);">
+                    <i class="fas fa-images" style="color: var(--primary); font-size: 1rem;"></i>
+                </div>
+                Pet Gallery
+            </h2>
+            <div style="display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.5rem; scroll-snap-type: x mandatory;">
+                {% for pet in pets %}
+                <div style="min-width: 160px; flex: 0 0 160px; scroll-snap-align: start; position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border); background: var(--card-bg);">
+                    <a href="{% url 'pet_detail' pet.pk %}" style="display: block; text-decoration: none;">
+                        {% if pet.image %}
+                        <img src="{{ pet.image.url }}" alt="{{ pet.name }}" style="width: 100%; height: 130px; object-fit: cover; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        {% else %}
+                        <div style="width: 100%; height: 130px; background: var(--bg-subtle); display: flex; align-items: center; justify-content: center; color: var(--text-faint);">
+                            <i class="fas fa-paw fa-2x"></i>
+                        </div>
+                        {% endif %}
+                        <div style="padding: 0.65rem; background: linear-gradient(transparent, rgba(0,0,0,0.85)); position: absolute; bottom: 0; left: 0; right: 0; color: white;">
+                            <h3 style="margin: 0; font-weight: 700; font-size: 0.85rem;">{{ pet.name }}</h3>
+                            <p style="margin: 0; font-size: 0.7rem; opacity: 0.85;">{{ pet.breed }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Booking Trends Chart Section (Staff Only) -->
+    {% if user.is_staff %}
+    <div class="glass-card hover-lift" style="padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="font-weight: 800; color: var(--text-main); margin-bottom: 1.75rem; display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; letter-spacing: -0.02em;">
+            <div style="width: 2.5rem; height: 2.5rem; border-radius: var(--radius-md); background: rgba(16, 185, 129, 0.1); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);">
+                <i class="fas fa-chart-line" style="color: var(--primary); font-size: 1rem;"></i>
+            </div>
+            Booking Trends
+        </h2>
+        <div style="height: 300px; position: relative;">
+            <canvas id="bookingChart"></canvas>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Bottom row: Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        <!-- Card 1: Pets -->
+        <div class="glass-card" style="padding: 2rem; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="color: var(--primary); font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 0.6rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-dog"></i> My Pets ({{ pets.count }})
+                </h3>
+                <a href="{% url 'pet_create' %}" class="btn btn-primary shimmer" style="padding: 0.5rem 1rem; font-size: 0.8rem; border-radius: var(--radius-md);"><i class="fas fa-plus"></i> Add</a>
+            </div>
+            <div style="flex-grow: 1;">
+                {% if pets %}
+                <ul style="list-style: none; padding: 0; margin-bottom: 0.75rem;">
+                    {% for pet in pets|slice:":3" %}
+                    <li style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem;">
+                        <div style="width: 34px; height: 34px; border-radius: var(--radius-full); background: var(--bg-subtle); overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);">
+                            {% if pet.image %}
+                            <img src="{{ pet.image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% else %}
+                            <i class="fas fa-paw" style="color: var(--text-faint); font-size: 0.7rem;"></i>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'pet_detail' pet.pk %}" style="font-weight: 600; text-decoration: none; color: var(--text-main); font-size: 0.9rem;">{{ pet.name }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p style="color: var(--text-muted); font-size: 0.88rem;">No pets registered yet.</p>
+                {% endif %}
+            </div>
+            <a href="{% url 'pet_list' %}" style="color: var(--primary); font-size: 0.8rem; font-weight: 600; text-decoration: none;">View All Pets <i class="fas fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+        </div>
+
+        <!-- Card 2: Bookings -->
+        <div style="background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: var(--primary); font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-calendar-alt"></i> Bookings
+                </h3>
+                <div style="display: flex; gap: 0.35rem;">
+                    <a href="{% url 'booking_calendar' %}" class="btn btn-sm" style="background: var(--primary-light); color: var(--primary); border: none;"><i class="fas fa-calendar"></i></a>
+                    <a href="{% url 'booking_create' %}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i></a>
+                </div>
+            </div>
+            <div style="flex-grow: 1;">
+                {% if recent_bookings %}
+                <ul style="list-style: none; padding: 0; margin-bottom: 0.75rem;">
+                    {% for booking in recent_bookings|slice:":3" %}
+                    <li style="margin-bottom: 0.6rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border);">
+                        <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.88rem;">
+                            <span>{{ booking.pet.name }}</span>
+                            <span style="font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: var(--radius-full); background: var(--primary-light); color: var(--primary); font-weight: 600;">{{ booking.get_status_display }}</span>
+                        </div>
+                        <div style="font-size: 0.78rem; color: var(--text-muted);">{{ booking.start_time|date:"M j" }}</div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p style="color: var(--text-muted); font-size: 0.88rem;">No upcoming appointments.</p>
+                {% endif %}
+            </div>
+            <a href="{% url 'booking_list' %}" style="color: var(--primary); font-size: 0.8rem; font-weight: 600; text-decoration: none;">View Booking List <i class="fas fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+        </div>
+
+        <!-- Card 3: Invoices -->
+        <div style="background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: var(--primary); font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-file-invoice-dollar"></i> Billing
+                </h3>
+                <a href="{% url 'invoice_list' %}" class="btn btn-primary btn-sm"><i class="fas fa-receipt"></i> All</a>
+            </div>
+            <p style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 0.88rem;">Check your payment history and outstanding invoices.</p>
+            {% if latest_invoice %}
+            <div style="border-top: 1px solid var(--border); padding-top: 0.85rem;">
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.6rem;">Recent Invoice #{{ latest_invoice.id }}</p>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="{% url 'invoice_detail' latest_invoice.pk %}" class="btn btn-primary btn-sm" style="flex: 1;">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                    <a href="{% url 'generate_invoice_pdf' latest_invoice.pk %}" class="btn btn-sm" style="flex: 1; background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border);">
+                        <i class="fas fa-file-download"></i> PDF
+                    </a>
+                    {% if latest_invoice.status == 'unpaid' %}
+                    <a href="{% url 'pay_invoice' latest_invoice.pk %}" class="btn btn-highlight btn-sm" style="width: 100%; margin-top: 0.4rem; justify-content: center;">
+                        <i class="fas fa-credit-card"></i> Pay Now
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if user.is_staff_member %}
+        <!-- Card 4: Rosters (Staff Only) -->
+        <div style="background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: var(--primary); font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-user-clock"></i> My Roster
+                </h3>
+                <a href="{% url 'roster_list' %}" class="btn btn-primary btn-sm"><i class="fas fa-clock"></i> View</a>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">Check your work schedule and clock in/out.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if user.is_staff %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('bookingChart').getContext('2d');
+        
+        // Pass chart data from Django context
+        let labels = {{ chart_labels|safe|default:"[]" }};
+        let data = {{ chart_data|safe|default:"[]" }};
+
+        // VIVA DEMO MODE: If no real bookings exist, show a nice sample curve
+        if (labels.length === 0 || (data.length > 0 && data.every(v => v === 0))) {
+            labels = ['Oct 2025', 'Nov 2025', 'Dec 2025', 'Jan 2026', 'Feb 2026', 'Mar 2026'];
+            data = [2, 5, 3, 8, 12, 10]; // Sample data for presentation
+            
+            // Add a "Demo Data" label for clarity
+            const header = document.querySelector('#bookingChart').closest('div').previousElementSibling;
+            const badge = document.createElement('span');
+            badge.innerText = 'DEMO MODE';
+            badge.style = 'font-size: 0.65rem; background: var(--primary-light); color: var(--primary); padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: auto;';
+            header.appendChild(badge);
+        }
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Premium Analytics',
+                    data: data,
+                    fill: 'start',
+                    backgroundColor: (context) => {
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+                        if (!chartArea) return null;
+                        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                        gradient.addColorStop(0, 'rgba(16, 185, 129, 0)');
+                        gradient.addColorStop(1, 'rgba(16, 185, 129, 0.25)');
+                        return gradient;
+                    },
+                    borderColor: '#10B981',
+                    borderWidth: 3,
+                    tension: 0.45,
+                    pointBackgroundColor: '#F8FAFC',
+                    pointBorderColor: '#10B981',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointHoverBorderWidth: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#0F172A',
+                        titleFont: { family: 'Inter', weight: '700', size: 14 },
+                        bodyFont: { family: 'Inter', size: 13 },
+                        padding: 12,
+                        cornerRadius: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: (context) => ` ${context.parsed.y} Global Bookings`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            color: '#94A3B8',
+                            font: { family: 'Inter', size: 11, weight: '600' }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.1)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#94A3B8',
+                            font: { family: 'Inter', size: 11 },
+                            stepSize: 2
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}
+```

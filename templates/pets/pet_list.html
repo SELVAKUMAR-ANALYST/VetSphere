@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}My Pets - VetSphere{% endblock %}
+
+{% block extra_css %}
+<style>
+    .search-container {
+        margin-bottom: 3rem;
+        max-width: 600px;
+    }
+
+    .search-glass {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-lg);
+        padding: 0.5rem;
+        display: flex;
+        gap: 0.5rem;
+        box-shadow: var(--shadow-md);
+    }
+
+    .search-glass input {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        color: var(--text-main);
+        width: 100%;
+        outline: none;
+    }
+
+    .pet-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .pet-card-premium {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pet-image-wrap {
+        height: 220px;
+        overflow: hidden;
+        border-radius: var(--radius-lg);
+        margin-bottom: 1.25rem;
+        background: var(--bg-subtle);
+    }
+
+    .pet-image-premium {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s var(--ease);
+    }
+
+    .pet-card-premium:hover .pet-image-premium {
+        transform: scale(1.08);
+    }
+
+    .pet-badge {
+        position: absolute;
+        top: 1rem; right: 1rem;
+        background: rgba(16, 185, 129, 0.9);
+        color: white;
+        padding: 0.35rem 0.85rem;
+        border-radius: var(--radius-full);
+        font-size: 0.7rem;
+        font-weight: 700;
+        backdrop-filter: blur(4px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem;">
+        <div>
+            <h1 style="font-weight: 900; font-size: 2.5rem; letter-spacing: -0.04em; color: var(--text-main); margin-bottom: 0.5rem;">My <span class="text-highlight">Pets</span></h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Manage your beloved companions with premium care.</p>
+        </div>
+        <a href="{% url 'pet_create' %}" class="btn btn-primary shimmer" style="padding: 1rem 2rem; border-radius: var(--radius-lg); font-size: 1rem;">
+            <i class="fas fa-plus"></i> Add New Pet
+        </a>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-container">
+        <form method="GET" action="{% url 'pet_list' %}" class="search-glass">
+            <input type="text" name="q" placeholder="Search by name or breed..." value="{{ query|default:'' }}">
+            <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem; border-radius: var(--radius-md);">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+        {% if query %}
+        <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+            Showing results for "<span style="color: var(--primary); font-weight: 600;">{{ query }}</span>" 
+            <a href="{% url 'pet_list' %}" style="margin-left: 0.5rem; color: var(--text-faint); text-decoration: underline;">Clear</a>
+        </p>
+        {% endif %}
+    </div>
+
+    {% if pets %}
+    <div class="pet-grid">
+        {% for pet in pets %}
+        <div class="glass-card pet-card-premium hover-lift" style="padding: 1.5rem;">
+            <div class="pet-image-wrap">
+                {% if pet.image %}
+                <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="pet-image-premium">
+                {% else %}
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-faint); background: var(--bg-subtle);">
+                    <i class="fas fa-paw fa-4x" style="opacity: 0.2;"></i>
+                </div>
+                {% endif %}
+                <div class="pet-badge">{{ pet.breed }}</div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em;">
+                    <a href="{% url 'pet_detail' pet.pk %}" style="color: var(--text-main); text-decoration: none;">{{ pet.name }}</a>
+                </h2>
+                <div style="display: flex; gap: 0.85rem;">
+                    <a href="{% url 'pet_update' pet.pk %}" class="social-icon" style="width: 2rem; height: 2rem; font-size: 0.75rem;" title="Edit"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'pet_delete' pet.pk %}" class="social-icon" style="width: 2rem; height: 2rem; font-size: 0.75rem; color: var(--alert-error-text);" title="Delete"><i class="fas fa-trash"></i></a>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">
+                <span><i class="fas fa-paw" style="color: var(--primary); margin-right: 0.3rem;"></i> {{ pet.get_pet_type_display }}</span>
+                <span><i class="fas fa-calendar-alt" style="color: var(--primary); margin-right: 0.3rem;"></i> {{ pet.age }} Years</span>
+                <span><i class="fas fa-stethoscope" style="color: var(--primary); margin-right: 0.3rem;"></i> {{ pet.medical_info|truncatechars:20|default:"Healthy" }}</span>
+            </div>
+            
+            <a href="{% url 'pet_detail' pet.pk %}" class="btn btn-secondary" style="width: 100%; margin-top: 1.5rem; justify-content: space-between; padding: 0.8rem 1.25rem; border-color: var(--border);">view profile <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i></a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="glass-card" style="text-align: center; padding: 5rem 2rem; border-style: dashed; border-width: 2px;">
+        <div style="background: var(--primary-light); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+            <i class="fas fa-search" style="font-size: 2rem; color: var(--primary);"></i>
+        </div>
+        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem;">No pets found</h3>
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem;">We couldn't find any pets matching your criteria.</p>
+        <a href="{% url 'pet_list' %}" class="btn btn-secondary">View All Pets</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

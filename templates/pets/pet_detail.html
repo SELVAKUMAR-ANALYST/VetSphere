@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ pet.name }}'s Profile - VetSphere{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-header {
+        background: var(--card-bg);
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 1.75rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+    }
+
+    .profile-image {
+        width: 220px;
+        height: 220px;
+        object-fit: cover;
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-md);
+    }
+
+    .placeholder-image {
+        width: 220px;
+        height: 220px;
+        background: var(--bg-subtle);
+        border-radius: var(--radius-xl);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-faint);
+    }
+
+    .log-timeline {
+        position: relative;
+        padding-left: 1.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .log-timeline::before {
+        content: '';
+        position: absolute;
+        left: 0.45rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: var(--border);
+    }
+
+    .log-item {
+        position: relative;
+        margin-bottom: 1.5rem;
+        background: var(--card-bg);
+        padding: 1.25rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .log-item::before {
+        content: '';
+        position: absolute;
+        left: -1.55rem;
+        top: 1.5rem;
+        width: 10px;
+        height: 10px;
+        background: var(--primary);
+        border-radius: 50%;
+        border: 3px solid var(--card-bg);
+        box-shadow: 0 0 0 2px var(--border);
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: var(--radius-full);
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 0.35rem;
+        letter-spacing: 0.03em;
+    }
+
+    .badge-feeding { background: var(--alert-success-bg); color: var(--alert-success-text); }
+    .badge-walk { background: var(--primary-light); color: var(--primary); }
+    .badge-medication { background: var(--alert-error-bg); color: var(--alert-error-text); }
+    .badge-grooming { background: rgba(14, 165, 233, 0.1); color: #0EA5E9; }
+    .badge-behavior { background: rgba(139, 92, 246, 0.1); color: #7C3AED; }
+    .badge-other { background: var(--bg-subtle); color: var(--text-muted); }
+
+    /* Health Log Specific */
+    .health-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s var(--ease);
+    }
+    .health-card:hover { border-color: var(--primary); transform: translateX(4px); }
+    
+    .log-type-indicator {
+        width: 3px;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        border-radius: 3px 0 0 3px;
+    }
+    
+    .tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+    .tab-btn { 
+        padding: 0.75rem 1rem; 
+        cursor: pointer; 
+        font-weight: 600; 
+        color: var(--text-muted); 
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+    }
+    .tab-btn.active { color: var(--primary); border-color: var(--primary); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="fade-in">
+    <a href="{% url 'pet_list' %}" style="display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-muted); margin-bottom: 1.5rem; text-decoration: none; font-size: 0.88rem; font-weight: 500;">
+        <i class="fas fa-arrow-left"></i> Back to My Pets
+    </a>
+
+    <div class="profile-header">
+        {% if pet.image %}
+        <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="profile-image">
+        {% else %}
+        <div class="placeholder-image">
+            <i class="fas fa-paw fa-4x"></i>
+        </div>
+        {% endif %}
+
+        <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h1 style="font-size: 2.25rem; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.03em; background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ pet.name }}</h1>
+                    <p style="font-size: 1.15rem; color: var(--text-muted); font-weight: 500; margin-bottom: 1.25rem;">{{ pet.breed }} • {{ pet.get_pet_type_display }}</p>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="{% url 'pet_update' pet.pk %}" class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i> Edit Profile</a>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-lg);">
+                <div>
+                    <h3 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.35rem; font-weight: 700;">Age</h3>
+                    <p style="font-size: 1.1rem; font-weight: 700;">{{ pet.age }} <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-faint);">Years</span></p>
+                </div>
+                <div>
+                    <h3 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.35rem; font-weight: 700;">Weight</h3>
+                    <p style="font-size: 1.1rem; font-weight: 700;">-- <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-faint);">kg</span></p>
+                </div>
+                <div>
+                    <h3 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.35rem; font-weight: 700;">Medical Stats</h3>
+                    <p style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">{{ health_logs|length }} <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-faint);">Records</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start;">
+        <div>
+            <div class="tabs">
+                <div class="tab-btn active" onclick="switchTab(event, 'daily-logs')">Daily Activity</div>
+                <div class="tab-btn" onclick="switchTab(event, 'health-history')">Health History</div>
+            </div>
+
+            <div id="daily-logs" class="tab-content active">
+                {% if logs %}
+                <div class="log-timeline">
+                    {% for log in logs %}
+                    <div class="log-item">
+                        <span class="badge badge-{{ log.activity_type }}">{{ log.get_activity_type_display }}</span>
+                        <p style="margin: 0.5rem 0; font-size: 1rem; color: var(--text-main);">{{ log.notes }}</p>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-faint); margin-top: 0.75rem; border-top: 1px solid var(--border-light); padding-top: 0.5rem;">
+                            <span><i class="fas fa-user-circle" style="margin-right: 0.3rem;"></i> {{ log.logged_by.get_full_name|default:log.logged_by.username }}</span>
+                            <span><i class="far fa-clock" style="margin-right: 0.3rem;"></i> {{ log.date|date:"M j, Y, g:i a" }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 4rem 2rem; background: var(--card-bg); border-radius: var(--radius-xl); border: 2px dashed var(--border);">
+                    <div style="background: var(--bg-subtle); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                        <i class="fas fa-clipboard-list fa-2x" style="color: var(--text-faint);"></i>
+                    </div>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">No Daily Logs</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Keep track of feeding, walks, and grooming here.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div id="health-history" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 1.25rem; font-weight: 800;">Medical Records</h2>
+                    <button class="btn btn-primary btn-sm" onclick="toggleHealthForm()"><i class="fas fa-plus"></i> Add Record</button>
+                </div>
+
+                {% if health_logs %}
+                    {% for log in health_logs %}
+                    <div class="health-card" style="position: relative; overflow: hidden; padding-left: 1.5rem;">
+                        <div class="log-type-indicator {% if log.log_type == 'emergency' %}bg-error{% elif log.log_type == 'vaccination' %}bg-primary{% else %}bg-secondary{% endif %}" 
+                             style="background-color: {% if log.log_type == 'emergency' %}#ef4444{% elif log.log_type == 'vaccination' %}#10b981{% else %}#3b82f6{% endif %};"></div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                            <div>
+                                <h4 style="font-weight: 700; color: var(--text-main);">{{ log.get_log_type_display }}</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">{{ log.date|date:"F j, Y" }}</p>
+                            </div>
+                            {% if log.follow_up_required %}
+                            <span class="badge" style="background: #FFFBEB; color: #D97706; font-size: 0.65rem;">Follow-up Req.</span>
+                            {% endif %}
+                        </div>
+                        <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">{{ log.description }}</p>
+                        {% if log.veterinarian_name %}
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-user-md" style="color: var(--primary);"></i> Dr. {{ log.veterinarian_name }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div style="text-align: center; padding: 4rem 2rem; background: var(--card-bg); border-radius: var(--radius-xl); border: 2px dashed var(--border);">
+                    <div style="background: var(--bg-subtle); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                        <i class="fas fa-hand-holding-medical fa-2x" style="color: var(--text-faint);"></i>
+                    </div>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Clinical Goldmine Empty</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Track vaccinations, surgeries, and medical history here.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div style="position: sticky; top: 6.5rem;">
+            <!-- Activity Form -->
+            <div id="activity-form-container" class="glass-card" style="padding: 1.75rem; margin-bottom: 1.5rem;">
+                <h3 style="font-weight: 800; margin-bottom: 1.25rem; font-size: 1.1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.6rem;">
+                    <i class="fas fa-plus-circle" style="color: var(--primary);"></i> Add Activity
+                </h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in log_form %}
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 700; font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary shimmer" style="width: 100%; padding: 0.85rem; border-radius: var(--radius-lg); font-weight: 700;">Submit Entry</button>
+                </form>
+            </div>
+
+            <!-- Health Log Form (Hidden by default) -->
+            <div id="health-form-container" class="glass-card shadow-glow" style="padding: 1.75rem; display: none; border-color: var(--primary);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-main);">Medical Record</h3>
+                    <i class="fas fa-times" style="cursor: pointer; color: var(--text-faint);" onclick="toggleHealthForm()"></i>
+                </div>
+                <form method="post" action="{% url 'add_health_log' pet.pk %}">
+                    {% csrf_token %}
+                    {% for field in health_form %}
+                    <div style="margin-bottom: 1.15rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 700; font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-elite" style="width: 100%; border-radius: var(--radius-lg);">Add Medical Record</button>
+                </form>
+            </div>
+            
+            <div class="glass-card" style="padding: 1.5rem; background: var(--primary-light); border: 1px solid var(--glass-border);">
+                <h4 style="font-weight: 700; margin-bottom: 0.5rem; color: var(--primary); font-size: 0.95rem;">Quick Tip</h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">Regular medical logging helps your vet provide better care and keeps your pet healthy!</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    function switchTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].classList.remove("active");
+        }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+        
+        // When switching to health history, hide the activity form to avoid confusion
+        if(tabName === 'health-history') {
+            document.getElementById('activity-form-container').style.display = 'none';
+        } else {
+            document.getElementById('activity-form-container').style.display = 'block';
+            document.getElementById('health-form-container').style.display = 'none';
+        }
+    }
+
+    function toggleHealthForm() {
+        var form = document.getElementById('health-form-container');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            document.getElementById('activity-form-container').style.display = 'none';
+        } else {
+            form.style.display = 'none';
+            document.getElementById('activity-form-container').style.display = 'none'; // Keep it hidden if we stay on health tab
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Staff Roster - VetSphere{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="fade-in">
+    <h1 style="margin-bottom: 2rem; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em;">Staff Roster</h1>
+
+    {% if shifts %}
+    {% for shift in shifts %}
+    <div style="background: var(--card-bg); border-radius: var(--radius-xl); padding: 1.25rem 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 0.85rem; display: flex; justify-content: space-between; align-items: center; transition: all var(--duration) var(--ease);"
+         onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)'"
+         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow)'">
+        <div>
+            <h3 style="color: var(--text-main); font-weight: 700; font-size: 1rem;">{{ shift.staff.username }}'s Shift</h3>
+            <p style="color: var(--text-muted); font-size: 0.82rem;">
+                <i class="far fa-calendar-alt"></i> {{ shift.start_time|date:"D, d M Y" }}
+                &nbsp;&middot;&nbsp;
+                <i class="far fa-clock"></i> {{ shift.start_time|date:"h:i A" }} - {{ shift.end_time|date:"h:i A" }}
+            </p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+            {% if not shift.timesheet.clocked_in %}
+            <a href="{% url 'clock_in' shift.pk %}" class="btn btn-primary btn-sm">Clock In</a>
+            {% elif not shift.timesheet.clocked_out %}
+            <a href="{% url 'clock_out' shift.pk %}" class="btn btn-sm" style="background: var(--primary-light); color: var(--primary); border: none;">Clock Out</a>
+            {% else %}
+            <span style="color: var(--alert-success-text); font-size: 0.82rem; font-weight: 600;"><i class="fas fa-check-circle"></i> Done</span>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div style="text-align: center; padding: 3.5rem; background: var(--card-bg); border-radius: var(--radius-xl); border: 2px dashed var(--border);">
+        <i class="fas fa-users-cog" style="font-size: 2.5rem; color: var(--text-faint); margin-bottom: 1rem;"></i>
+        <h3 style="font-weight: 700; margin-bottom: 0.5rem;">No shifts scheduled</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Check back later for your upcoming roster.</p>
+    </div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

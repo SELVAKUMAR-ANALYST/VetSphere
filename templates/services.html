@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Services - VetSphere{% endblock %}
+
+{% block extra_css %}
+<style>
+    .services-hero {
+        background: var(--gradient-hero);
+        color: white;
+        text-align: center;
+        padding: 8rem 2rem 6rem;
+        margin-bottom: 0;
+        border-radius: 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .services-hero h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.05em;
+    }
+
+    .service-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: var(--radius-2xl);
+        padding: 3rem 2.5rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--glass-border);
+        transition: all 0.4s var(--ease);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .service-card:hover {
+        transform: translateY(-12px);
+        box-shadow: var(--shadow-lg), var(--shadow-glow);
+        border-color: var(--primary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="services-hero">
+    <div class="fade-in">
+        <h1>Our <span class="text-highlight">Services</span></h1>
+        <p style="font-size: 1.25rem;">Comprehensive, compassionate, and elite care for your pets.</p>
+    </div>
+</div>
+
+<div class="container fade-in" style="margin-top: -3rem; position: relative; z-index: 10;">
+
+<!-- Services Grid -->
+<div class="services-grid fade-in">
+    {% for service in services %}
+    <div class="service-card">
+        <div class="service-icon-wrapper">
+            {% if "Boarding" in service.name or "Facilities" in service.name %}
+                <i class="fas fa-hospital"></i>
+            {% elif "Grooming" in service.name or "Spa" in service.name %}
+                <i class="fas fa-bath"></i>
+            {% elif "Surgery" in service.name %}
+                <i class="fas fa-procedures"></i>
+            {% elif "Consult" in service.name %}
+                <i class="fas fa-user-md"></i>
+            {% elif "Diagnos" in service.name %}
+                <i class="fas fa-microscope"></i>
+            {% elif "Prevent" in service.name or "Vaccin" in service.name %}
+                <i class="fas fa-shield-alt"></i>
+            {% elif "Training" in service.name %}
+                <i class="fas fa-dog"></i>
+            {% else %}
+                <i class="fas fa-paw"></i>
+            {% endif %}
+        </div>
+        <h3 style="color: var(--text-main); font-weight: 800; margin-bottom: 1rem;">{{ service.name }}</h3>
+        <p style="color: var(--text-secondary); line-height: 1.6;">{{ service.description }}</p>
+
+        <!-- Star Ratings -->
+        <div style="margin-bottom: 1rem;">
+            {% if service.avg_rating %}
+                <div style="color: var(--accent); font-size: 1rem; margin-bottom: 0.25rem;">
+                    {% with rating=service.avg_rating|floatformat:"0" %}
+                    <i class="{% if rating >= '1' %}fas{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= '2' %}fas{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= '3' %}fas{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= '4' %}fas{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= '5' %}fas{% else %}far{% endif %} fa-star"></i>
+                    {% endwith %}
+                </div>
+                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                    {{ service.avg_rating|floatformat:1 }} / 5.0 ({{ service.review_count }} reviews)
+                </span>
+            {% else %}
+                <div style="color: var(--text-faint); font-size: 1rem; margin-bottom: 0.25rem;">
+                    <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">No reviews yet</span>
+            {% endif %}
+        </div>
+
+        <div style="font-weight: 800; color: var(--primary); font-size: 1.35rem; margin-top: auto;">
+            ₹{{ service.price }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- CTA Banner -->
+<div class="glass-card fade-in shimmer" style="padding: 5rem; text-align: center; margin-bottom: 8rem; border-color: var(--primary);">
+    <h2 style="font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 1.5rem;">Ready to Unlock <span class="text-highlight">Elite Care</span>?</h2>
+    <p style="color: var(--text-muted); font-size: 1.15rem; margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.8;">Book an appointment with our specialist consultants today and join the future of pet health management.</p>
+    <a href="{% url 'register' %}" class="btn btn-primary shimmer" style="font-size: 1.1rem; padding: 1.25rem 3.5rem; border-radius: var(--radius-lg); font-weight: 800;">
+        <i class="fas fa-calendar-check" style="margin-right: 0.5rem;"></i> Book Appointment
+    </a>
+</div>
+</div>
+{% endblock %}

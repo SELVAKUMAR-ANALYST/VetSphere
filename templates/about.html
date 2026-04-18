@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - VetSphere – Digital Veterinary Care Platform{% endblock %}
+
+{% block content %}
+<section id="about" style="padding: 10rem 0; background: var(--gradient-hero); position: relative; overflow: hidden;">
+    <div class="container">
+        <div class="about-container" style="display: grid; grid-template-columns: 1fr 1.1fr; gap: 6rem; align-items: center;">
+            <div class="about-image-side fade-in">
+                <div class="glass-card" style="padding: 1rem; border-radius: var(--radius-2xl); position: relative; z-index: 2;">
+                    <img src="{% static 'images/about_hero.png' %}" alt="Expert Vet" style="width: 100%; border-radius: var(--radius-xl); display: block;">
+                </div>
+                
+                <div class="glass-card hover-lift floating-call" style="background: var(--nav-bg); color: white; border-color: var(--primary);">
+                    <i class="fas fa-phone-alt" style="color: var(--primary); font-size: 1.25rem;"></i>
+                    <div>
+                        <span style="font-size: 0.75rem; display: block; opacity: 0.7;">Elite Support</span>
+                        <strong style="font-size: 1.1rem; letter-spacing: 0.05em;">93602 26522</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-content-side fade-in" style="animation-delay: 0.2s;">
+                <div class="glass-card" style="padding: 4rem; border-color: var(--glass-border);">
+                    <h2 style="font-size: 3.5rem; font-weight: 900; line-height: 0.95; letter-spacing: -0.05em; margin-bottom: 2rem; color: #FFF;">
+                        Expert Care at <br><span class="text-highlight">VetSphere</span>
+                    </h2>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2.5rem;">
+                        VetSphere in Adyar, Chennai provides world-class pet care, advanced surgical precision, and a holistic approach to pet wellness.
+                    </p>
+
+                    <ul class="feature-list" style="margin-bottom: 3rem;">
+                        <li class="feature-item" style="color: #FFF; margin-bottom: 1rem; font-size: 1.05rem;"><i class="fas fa-check-circle" style="color: var(--primary);"></i> Elite diagnostics & vaccinations</li>
+                        <li class="feature-item" style="color: #FFF; margin-bottom: 1rem; font-size: 1.05rem;"><i class="fas fa-check-circle" style="color: var(--primary);"></i> Advanced surgical environment</li>
+                        <li class="feature-item" style="color: #FFF; font-size: 1.05rem;"><i class="fas fa-check-circle" style="color: var(--primary);"></i> Precision health management</li>
+                    </ul>
+
+                    <a href="{% url 'register' %}" class="btn btn-primary shimmer" style="padding: 1.15rem 2.5rem; border-radius: var(--radius-lg); font-weight: 800; font-size: 1.1rem;">
+                        <i class="fas fa-calendar-check" style="margin-right: 0.5rem;"></i> Book Appointment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container fade-in" style="text-align: center; padding: 10rem 2rem;">
+    <span style="color: var(--primary); font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.25em; display: block; margin-bottom: 1.5rem;">The Mission</span>
+    <h3 style="font-size: 3rem; font-weight: 900; margin-bottom: 2.5rem; letter-spacing: -0.04em; line-height: 1.1;">
+        VetSphere – The <span class="text-highlight">Future</span> of Veterinary Care
+    </h3>
+    <p style="color: var(--text-muted); max-width: 800px; margin: 0 auto; line-height: 1.9; font-size: 1.25rem;">
+        VetSphere is more than a clinic; it's a sanctuary for your companions. In Adyar, Chennai, we've built an elite ecosystem combining high-quality medical precision with a digital-first approach to pet management.
+    </p>
+</div>
+{% endblock %}

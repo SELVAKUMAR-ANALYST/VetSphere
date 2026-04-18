@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}Bookings - VetSphere{% endblock %}
+
+{% block extra_css %}
+<style>
+    .booking-card {
+        background: var(--card-bg);
+        border-radius: var(--radius-xl);
+        padding: 1.25rem 1.5rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        margin-bottom: 0.85rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all var(--duration) var(--ease);
+    }
+
+    .booking-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+    }
+
+    .status-badge {
+        padding: 0.2rem 0.65rem;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .status-pending { background: var(--status-pending-bg); color: var(--status-pending-text); }
+    .status-confirmed { background: var(--status-confirmed-bg); color: var(--status-confirmed-text); }
+    .status-checked_in { background: var(--status-checkedin-bg); color: var(--status-checkedin-text); }
+    .status-completed { background: var(--status-completed-bg); color: var(--status-completed-text); }
+    .status-cancelled { background: var(--status-cancelled-bg); color: var(--status-cancelled-text); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em;">Bookings</h1>
+        <a href="{% url 'booking_create' %}" class="btn btn-primary"><i class="fas fa-calendar-plus"></i> New Booking</a>
+    </div>
+
+    {% if bookings %}
+    
+    {% if user.is_staff %}
+    <!-- Admin View: Streamlined Table -->
+    <div style="background: var(--card-bg); border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; margin-top: 1rem;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: rgba(0,0,0,0.02);">
+                    <th style="text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Pet</th>
+                    <th style="text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Service</th>
+                    <th style="text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Schedule</th>
+                    <th style="text-align: center; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Action</th>
+                    <th style="text-align: right; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 1rem 1.5rem;">
+                        <div style="font-weight: 700; color: var(--text-main);">{{ booking.pet.name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ booking.pet.owner.username }}</div>
+                    </td>
+                    <td style="padding: 1rem 1.5rem; font-size: 0.88rem; color: var(--text-secondary);">{{ booking.service.name }}</td>
+                    <td style="padding: 1rem 1.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                        <div>{{ booking.start_time|date:"M d, Y" }}</div>
+                        <div style="color: var(--text-muted); font-size: 0.75rem;">{{ booking.start_time|date:"h:i A" }} - {{ booking.end_time|date:"h:i A" }}</div>
+                    </td>
+                    <td style="padding: 1rem 1.5rem; text-align: center;">
+                        {% if booking.status == 'confirmed' or booking.status == 'pending' %}
+                        <a href="{% url 'check_in' booking.pk %}" class="btn btn-primary btn-sm" style="padding: 0.3rem 0.8rem; font-size: 0.75rem;">Check In</a>
+                        {% elif booking.status == 'checked_in' %}
+                        <a href="{% url 'check_out' booking.pk %}" class="btn btn-sm" style="background: var(--primary-light); color: var(--primary); border: none; padding: 0.3rem 0.8rem; font-size: 0.75rem;">Check Out</a>
+                        {% else %}
+                        <span style="color: var(--text-faint); font-size: 0.75rem;">N/A</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 1rem 1.5rem; text-align: right;">
+                        <span class="status-badge status-{{ booking.status }}">{{ booking.get_status_display }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <!-- Customer View: Card Layout -->
+    {% for booking in bookings %}
+    <div class="booking-card">
+        <div>
+            <h3 style="color: var(--text-main); font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem;">{{ booking.pet.name }}</h3>
+            <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 0.35rem;">
+                <i class="far fa-calendar"></i> {{ booking.start_time|date:"D, d M Y" }}
+                &nbsp;&middot;&nbsp;
+                <i class="far fa-clock"></i> {{ booking.start_time|date:"h:i A" }} - {{ booking.end_time|date:"h:i A" }}
+            </p>
+
+            {% with invoice=booking.invoice_set.first %}
+            {% if invoice %}
+                <div style="font-size: 0.78rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    {% if invoice.status == 'paid' %}
+                        <span style="color: var(--alert-success-text); font-weight: 700;"><i class="fas fa-check-circle"></i> Paid</span>
+                        <a href="{% url 'invoice_detail' invoice.pk %}" style="color: var(--primary); font-size: 0.78rem;">View Invoice</a>
+                        {% with payment=invoice.payment_set.first %}
+                        {% if payment %}
+                            <span style="color: var(--text-muted);">via {{ payment.get_payment_method_display }}</span>
+                        {% endif %}
+                        {% endwith %}
+                    {% else %}
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <span style="color: var(--alert-error-text); font-weight: 700; font-size: 0.78rem;"><i class="fas fa-exclamation-circle"></i> Unpaid</span>
+                            <a href="{% url 'pay_invoice' invoice.pk %}" class="btn btn-primary btn-sm" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Pay Now</a>
+                            <a href="{% url 'invoice_detail' invoice.pk %}" style="color: var(--text-muted); font-size: 0.78rem; text-decoration: none;">View Detail</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span class="status-badge status-{{ booking.status }}">{{ booking.get_status_display }}</span>
+
+            {% if booking.status == 'confirmed' or booking.status == 'pending' %}
+            <a href="{% url 'check_in' booking.pk %}" class="btn btn-primary btn-sm">Check In</a>
+            {% elif booking.status == 'checked_in' %}
+            <a href="{% url 'check_out' booking.pk %}" class="btn btn-sm" style="background: var(--primary-light); color: var(--primary); border: none;">Check Out</a>
+            {% elif booking.status == 'completed' and not booking.review %}
+            <a href="{% url 'add_review' booking.id %}" class="btn btn-highlight btn-sm">Rate</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% else %}
+    <div style="text-align: center; padding: 3.5rem; background: var(--card-bg); border-radius: var(--radius-xl); border: 2px dashed var(--border);">
+        <i class="far fa-calendar-alt" style="font-size: 2.5rem; color: var(--text-faint); margin-bottom: 1rem;"></i>
+        <h3 style="font-weight: 700; margin-bottom: 0.5rem;">No bookings found</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 0.9rem;">Schedule a care session for your pet.</p>
+        <a href="{% url 'booking_create' %}" class="btn btn-primary">Schedule Now</a>
+    </div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}
