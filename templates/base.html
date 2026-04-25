@@ -91,54 +91,45 @@
         }
 
         /* ═══════════════════════════════════════════
-           DARK MODE - CINEMATIC
+           DARK MODE - CINEMATIC (POLISHED)
            ═══════════════════════════════════════════ */
         [data-theme='dark'] {
-            --primary: #10B981;
-            --primary-hover: #34D399;
-            --primary-light: rgba(16, 185, 129, 0.15);
-            --secondary: #064E3B;
+            --primary: #14B8A6; /* Professional Teal */
+            --primary-hover: #2DD4BF;
+            --primary-light: rgba(20, 184, 166, 0.15);
+            --secondary: #134E4A;
             
-            --bg: #020617; /* Deepest black-blue */
-            --bg-subtle: #0F172A;
-            --card-bg: #1E293B;
-            --card-bg-hover: #334155;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.05);
+            --bg: #030509; /* Deeper Obsidian */
+            --bg-subtle: #0B0E14;
+            --card-bg: #11151D;
+            --card-bg-hover: #1A1F2B;
+            --glass-bg: rgba(17, 21, 29, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
 
-            --text-main: #F8FAFC;
-            --text-secondary: #CBD5E1;
-            --text-muted: #94A3B8;
-            --text-faint: #475569;
+            --text-main: #FFFFFF;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --text-faint: #334155;
 
-            --border: #334155;
-            --border-light: #1E293B;
-            --divider: #334155;
+            --border: rgba(255, 255, 255, 0.1);
+            --border-light: rgba(255, 255, 255, 0.05);
+            --divider: rgba(255, 255, 255, 0.1);
 
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.5);
-            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.6);
-            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.7);
-            --shadow-glow: 0 0 30px rgba(16, 185, 129, 0.25);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.7);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.8);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.9);
+            --shadow-glow: 0 0 30px rgba(20, 184, 166, 0.2);
 
-            --gradient-primary: linear-gradient(135deg, #10B981 0%, #064E3B 100%);
+            --gradient-primary: linear-gradient(135deg, #14B8A6 0%, #0F766E 100%);
             --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
 
-            --input-bg: #0F172A;
-            --input-border: #334155;
-            --input-focus-border: #10B981;
-            --nav-bg: rgba(2, 6, 23, 0.95);
-            --nav-bg-rgb: 2, 6, 23;
-            --footer-bg: #0F172A;
-            --glass-border: rgba(255, 255, 255, 0.08); /* Fainter in dark mode */
-
-            /* Dark Mode Alerts */
-            --alert-success-bg: rgba(16, 185, 129, 0.1);
-            --alert-success-text: #10B981;
-            --alert-success-border: rgba(16, 185, 129, 0.2);
-            --alert-error-bg: rgba(239, 68, 68, 0.1);
-            --alert-error-text: #EF4444;
-            --alert-error-border: rgba(239, 68, 68, 0.2);
+            --input-bg: #0B0E14;
+            --input-border: rgba(255, 255, 255, 0.12);
+            --input-focus-border: #14B8A6;
+            --nav-bg: rgba(3, 5, 9, 0.9);
+            --nav-bg-rgb: 3, 5, 9;
+            --footer-bg: #030509;
         }
 
         /* Status Alert Helper */
@@ -287,13 +278,6 @@
 
         .logo:hover .logo-icon-wrap {
             background: rgba(255,255,255,0.22);
-        }
-
-        .logo img {
-            height: 2.2rem;
-            width: 2.2rem;
-            object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.3));
         }
 
         .logo-text {
@@ -1147,7 +1131,7 @@
     <header>
         <a href="/" class="logo">
             <div class="logo-icon-wrap">
-                <img src="{% static 'images/logo.png' %}?v=3" alt="VetSphere Logo">
+                <img src="{% static 'images/logo.png' %}?v=1.2" alt="VetSphere Logo" style="height: 2.2rem; width: 2.2rem; object-fit: contain;">
             </div>
             <span class="logo-text">VetSphere</span>
         </a>
@@ -1200,7 +1184,7 @@
             <div class="footer-col">
                 <a href="/" class="logo" style="margin-bottom: 1.5rem;">
                     <div class="logo-icon-wrap" style="background: var(--primary-light);">
-                        <img src="{% static 'images/logo.png' %}?v=2" alt="VetSphere Logo">
+                        <img src="{% static 'images/logo.png' %}?v=1.2" alt="VetSphere Logo" style="height: 2.2rem; width: 2.2rem; object-fit: contain;">
                     </div>
                     <span class="logo-text">VetSphere</span>
                 </a>
