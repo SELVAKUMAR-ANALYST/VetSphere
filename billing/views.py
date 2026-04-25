@@ -10,6 +10,9 @@ from reportlab.pdfbase.ttfonts import TTFont
 import io
 from django.core.mail import EmailMessage
 from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # Register a font that supports the Indian Rupee symbol (₹)
@@ -80,6 +83,7 @@ def pay_invoice(request, pk):
             from django.contrib import messages
             messages.success(request, "Payment successful.")
         except Exception as e:
+            logger.error(f"Error processing payment for invoice #{invoice.pk}: {e}", exc_info=True)
             from django.contrib import messages
             messages.error(request, "Payment failed. Please try again.")
         return redirect("invoice_list")
@@ -126,8 +130,8 @@ def generate_invoice_pdf(request, pk):
             )
             email_msg.attach(f"Invoice_{invoice.id}.pdf", pdf_content, "application/pdf")
             email_msg.send(fail_silently=True)
-    except Exception:
-        pass # Ignore email errors during download so it doesn't break PDF view
+    except Exception as e:
+        logger.error(f"Failed to send PDF email to {owner_email}: {e}", exc_info=True)
 
     # Return PDF as download response
     response = HttpResponse(pdf_content, content_type="application/pdf")

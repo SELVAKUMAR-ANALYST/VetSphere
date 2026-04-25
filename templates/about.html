@@ -1,57 +1,284 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}About Us - VetSphere – Digital Veterinary Care Platform{% endblock %}
+{% block title %}About Us - VetSphere Elite Care{% endblock %}
 
 {% block content %}
-<section id="about" style="padding: 10rem 0; background: var(--gradient-hero); position: relative; overflow: hidden;">
-    <div class="container">
-        <div class="about-container" style="display: grid; grid-template-columns: 1fr 1.1fr; gap: 6rem; align-items: center;">
-            <div class="about-image-side fade-in">
-                <div class="glass-card" style="padding: 1rem; border-radius: var(--radius-2xl); position: relative; z-index: 2;">
-                    <img src="{% static 'images/about_hero.png' %}" alt="Expert Vet" style="width: 100%; border-radius: var(--radius-xl); display: block;">
-                </div>
-                
-                <div class="glass-card hover-lift floating-call" style="background: var(--nav-bg); color: white; border-color: var(--primary);">
-                    <i class="fas fa-phone-alt" style="color: var(--primary); font-size: 1.25rem;"></i>
-                    <div>
-                        <span style="font-size: 0.75rem; display: block; opacity: 0.7;">Elite Support</span>
-                        <strong style="font-size: 1.1rem; letter-spacing: 0.05em;">93602 26522</strong>
-                    </div>
-                </div>
+<div class="split-login-container">
+    <!-- LEFT SIDE: THEME ZONE -->
+    <div class="split-left">
+        <div class="theme-bg about-theme-bg">
+        </div>
+        
+        <div class="theme-content fade-in">
+            <div class="brand-badge brand-teal">
+                <i class="fa-solid fa-shield-dog"></i>
             </div>
-
-            <div class="about-content-side fade-in" style="animation-delay: 0.2s;">
-                <div class="glass-card" style="padding: 4rem; border-color: var(--glass-border);">
-                    <h2 style="font-size: 3.5rem; font-weight: 900; line-height: 0.95; letter-spacing: -0.05em; margin-bottom: 2rem; color: #FFF;">
-                        Expert Care at <br><span class="text-highlight">VetSphere</span>
-                    </h2>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2.5rem;">
-                        VetSphere in Adyar, Chennai provides world-class pet care, advanced surgical precision, and a holistic approach to pet wellness.
-                    </p>
-
-                    <ul class="feature-list" style="margin-bottom: 3rem;">
-                        <li class="feature-item" style="color: #FFF; margin-bottom: 1rem; font-size: 1.05rem;"><i class="fas fa-check-circle" style="color: var(--primary);"></i> Elite diagnostics & vaccinations</li>
-                        <li class="feature-item" style="color: #FFF; margin-bottom: 1rem; font-size: 1.05rem;"><i class="fas fa-check-circle" style="color: var(--primary);"></i> Advanced surgical environment</li>
-                        <li class="feature-item" style="color: #FFF; font-size: 1.05rem;"><i class="fas fa-check-circle" style="color: var(--primary);"></i> Precision health management</li>
-                    </ul>
-
-                    <a href="{% url 'register' %}" class="btn btn-primary shimmer" style="padding: 1.15rem 2.5rem; border-radius: var(--radius-lg); font-weight: 800; font-size: 1.1rem;">
-                        <i class="fas fa-calendar-check" style="margin-right: 0.5rem;"></i> Book Appointment
-                    </a>
-                </div>
+            <h1 class="theme-title">ELITE CARE. <br><span class="highlight">UNCOMPROMISED.</span></h1>
+            <p class="theme-subtitle">Experience the future of pet care in Adyar, Chennai. Where world-class medical precision meets a digital-first sanctuary.</p>
+            
+            <div class="theme-quote quote-teal">
+                <p>"A sanctuary for your companions, a revolution in care."</p>
             </div>
         </div>
     </div>
-</section>
 
-<div class="container fade-in" style="text-align: center; padding: 10rem 2rem;">
-    <span style="color: var(--primary); font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.25em; display: block; margin-bottom: 1.5rem;">The Mission</span>
-    <h3 style="font-size: 3rem; font-weight: 900; margin-bottom: 2.5rem; letter-spacing: -0.04em; line-height: 1.1;">
-        VetSphere – The <span class="text-highlight">Future</span> of Veterinary Care
-    </h3>
-    <p style="color: var(--text-muted); max-width: 800px; margin: 0 auto; line-height: 1.9; font-size: 1.25rem;">
-        VetSphere is more than a clinic; it's a sanctuary for your companions. In Adyar, Chennai, we've built an elite ecosystem combining high-quality medical precision with a digital-first approach to pet management.
-    </p>
+    <!-- RIGHT SIDE: CONTENT ZONE -->
+    <div class="split-right content-zone">
+        <div class="about-scroll-content fade-in" style="animation-delay: 0.2s;">
+            <div class="mobile-header">
+                <h2 style="color: #14b8a6;">The Mission</h2>
+                <p>VetSphere is more than a clinic; it's a premium ecosystem designed for champions.</p>
+            </div>
+
+            <div class="mission-text">
+                <p>We've built an elite pet care sanctuary that combines high-quality medical precision with a sophisticated digital approach to wellness management.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="glass-feature-card hover-lift">
+                    <div class="card-icon"><i class="fas fa-stethoscope"></i></div>
+                    <h3>Elite Diagnostics</h3>
+                    <p>Advanced medical imaging and real-time health monitoring.</p>
+                </div>
+                <div class="glass-feature-card hover-lift">
+                    <div class="card-icon"><i class="fas fa-microscope"></i></div>
+                    <h3>Surgical Precision</h3>
+                    <p>State-of-the-art operation theaters for complex procedures.</p>
+                </div>
+                <div class="glass-feature-card hover-lift">
+                    <div class="card-icon"><i class="fas fa-heartbeat"></i></div>
+                    <h3>Precision Wellness</h3>
+                    <p>Tailored nutritional and lifestyle plans for every breed.</p>
+                </div>
+                <div class="glass-feature-card hover-lift">
+                    <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>24/7 Elite Support</h3>
+                    <p>Direct access to our senior veterinary consultants anytime.</p>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-num">5000+</span>
+                    <span class="stat-label">Pets Served</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num">15+</span>
+                    <span class="stat-label">Specialists</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num">4.9/5</span>
+                    <span class="stat-label">Client Rating</span>
+                </div>
+            </div>
+
+            <button class="magnetic-btn teal-btn" id="magneticBtn" onclick="window.location.href='{% url 'register' %}'">
+                <span>BOOK APPOINTMENT</span>
+                <i class="fa-solid fa-calendar-check"></i>
+            </button>
+        </div>
+    </div>
 </div>
+
+<style>
+    /* ==================== SPLIT LAYOUT CORE ==================== */
+    .split-login-container {
+        display: flex;
+        width: 100%;
+        min-height: calc(100vh - 5.5rem);
+        background: #030509;
+        overflow: hidden;
+        margin-top: -1rem;
+    }
+
+    .split-left {
+        flex: 1.1;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem;
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        overflow: hidden;
+    }
+
+    .split-right {
+        flex: 1;
+        background: #0B0E14;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 4rem 3rem;
+        position: relative;
+        z-index: 10;
+        box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+        overflow-y: auto;
+    }
+
+    @media (max-width: 992px) {
+        .split-login-container { flex-direction: column; height: auto; min-height: 100vh; }
+        .split-left { padding: 3rem 2rem; min-height: 40vh; }
+        .split-right { padding: 3rem 2rem; border-radius: 30px 30px 0 0; margin-top: -30px; }
+    }
+
+    /* ==================== LEFT SIDE (THEME ZONE) ==================== */
+    .about-theme-bg {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 1;
+        background: url("{% static 'images/kashmiradog.jpg' %}") center/cover no-repeat;
+    }
+
+    .about-theme-bg::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(90deg, rgba(3, 5, 9, 0.2) 0%, rgba(3, 5, 9, 0.95) 100%);
+        z-index: 1;
+    }
+
+    .brand-badge.brand-teal {
+        background: rgba(20, 184, 166, 0.1);
+        color: #14b8a6;
+        border-color: rgba(20, 184, 166, 0.3);
+    }
+
+    .theme-title .highlight {
+        color: #14b8a6;
+    }
+
+    .theme-quote.quote-teal {
+        border-left-color: #14b8a6;
+    }
+
+    /* ==================== RIGHT SIDE (CONTENT ZONE) ==================== */
+    .about-scroll-content {
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .mission-text {
+        font-size: 1.15rem;
+        color: #8892B0;
+        line-height: 1.8;
+        margin-bottom: 3rem;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    @media (max-width: 600px) {
+        .features-grid { grid-template-columns: 1fr; }
+    }
+
+    .glass-feature-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 1.5rem;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .glass-feature-card:hover {
+        background: rgba(20, 184, 166, 0.05);
+        border-color: rgba(20, 184, 166, 0.3);
+        transform: translateY(-8px);
+    }
+
+    .card-icon {
+        font-size: 1.5rem;
+        color: #14b8a6;
+        margin-bottom: 1rem;
+    }
+
+    .glass-feature-card h3 {
+        color: #FFFFFF;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+
+    .glass-feature-card p {
+        color: #8892B0;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .stats-bar {
+        display: flex;
+        justify-content: space-between;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin-bottom: 3rem;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-num {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: #FFFFFF;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: #8892B0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .teal-btn {
+        width: 100%;
+        background: #FFFFFF;
+        color: #030509;
+        border: none;
+        padding: 1.2rem;
+        border-radius: 14px;
+        font-size: 1.1rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        transition: all 0.3s ease;
+    }
+
+    .teal-btn:hover {
+        background: #14b8a6;
+        color: #FFFFFF;
+        box-shadow: 0 10px 30px rgba(20, 184, 166, 0.3);
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Magnetic Button Physics
+    const btn = document.getElementById('magneticBtn');
+    if (btn) {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = `translate(0px, 0px)`;
+        });
+    }
+});
+</script>
 {% endblock %}

@@ -2,6 +2,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from .models import Invoice
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=Invoice)
@@ -27,6 +30,6 @@ def notify_new_invoice(sender, instance, created, **kwargs):
             [pet_owner.email],
             fail_silently=True,
         )
-        print(
-            f"DEBUG: Billing email sent to {pet_owner.email} for invoice #{instance.id}."
+        logger.info(
+            f"Billing email sent to {pet_owner.email} for invoice #{instance.id}."
         )

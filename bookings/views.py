@@ -7,6 +7,9 @@ from .forms import BookingForm, ReviewForm
 from django.contrib import messages
 from django.db.models import Avg, Count
 from django.utils import timezone
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -72,7 +75,8 @@ def check_out(request, pk):
         Invoice.objects.get_or_create(booking=booking, defaults={"amount": amount})
         messages.success(request, "Pet checked out and invoice generated successfully.")
     except Exception as e:
-        messages.error(request, f"Checked out, but an error occurred while generating the invoice. {e}")
+        logger.error(f"Error generating invoice during checkout for booking {pk}: {e}", exc_info=True)
+        messages.error(request, "Checked out, but an error occurred while generating the invoice.")
 
     return redirect("booking_list")
 

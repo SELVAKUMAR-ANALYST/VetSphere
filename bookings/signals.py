@@ -2,6 +2,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from .models import Booking
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=Booking)
@@ -30,6 +33,6 @@ def notify_booking_status_change(sender, instance, created, **kwargs):
                 [pet_owner.email],
                 fail_silently=True,
             )
-            print(
-                f"DEBUG: Email sent to {pet_owner.email} for confirmed booking."
+            logger.info(
+                f"Email sent to {pet_owner.email} for confirmed booking."
             )

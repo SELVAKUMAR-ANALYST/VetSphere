@@ -3,6 +3,9 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 from .models import Enquiry
 from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=Enquiry)
@@ -29,6 +32,6 @@ def notify_admin_new_enquiry(sender, instance, created, **kwargs):
             [settings.DEFAULT_FROM_EMAIL],
             fail_silently=True,
         )
-        print(
-            f"DEBUG: Admin notification sent for enquiry from {instance.name}."
+        logger.info(
+            f"Admin notification sent for enquiry from {instance.name}."
         )
