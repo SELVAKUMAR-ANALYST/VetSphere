@@ -20,7 +20,7 @@ from django.urls import path, include
 from accounts.views import dashboard
 from bookings.views import services_view
 from django.views.generic import TemplateView
-from dashboard.views import contact_view
+from dashboard.views import contact_view, about_view
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -36,7 +36,7 @@ urlpatterns = [
     path("dashboard/", dashboard, name="dashboard"),
     path(
         "about/",
-        TemplateView.as_view(template_name="about.html"),
+        about_view,
         name="about",
     ),
     path(

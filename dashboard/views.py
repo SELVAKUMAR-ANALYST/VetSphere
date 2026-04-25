@@ -133,9 +133,25 @@ def contact_view(request):
     return render(request, "contact.html", {"form": form})
 
 
+
 @user_passes_test(is_admin, login_url="admin_login")
 def admin_message_list(request):
     messages = ContactMessage.objects.all().order_by("-created_at")
     return render(
         request, "dashboard/admin_message_list.html", {"contact_messages": messages}
     )
+
+
+def about_view(request):
+    from django.db.models import Avg
+    from bookings.models import Booking, Review
+    total_bookings = Booking.objects.count()
+    total_staff = User.objects.filter(is_staff=True).count()
+    avg_rating = Review.objects.aggregate(Avg('rating'))['rating__avg'] or 0
+    
+    context = {
+        "total_bookings": total_bookings,
+        "total_staff": total_staff,
+        "avg_rating": round(avg_rating, 1),
+    }
+    return render(request, "about.html", context)
