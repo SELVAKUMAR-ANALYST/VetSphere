@@ -33,11 +33,11 @@
             --glass-bg: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(16, 185, 129, 0.15); /* Tinted border for visibility */
 
-            /* Text */
-            --text-main: #0F172A;
-            --text-secondary: #334155;
-            --text-muted: #64748B;
-            --text-faint: #94A3B8;
+            /* Text - Darkened for Light Mode Readability */
+            --text-main: #000000;
+            --text-secondary: #1E293B;
+            --text-muted: #334155;
+            --text-faint: #475569;
 
             /* Borders & Lines */
             --border: #E2E8F0;
@@ -120,6 +120,9 @@
             --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.8);
             --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.9);
             --shadow-glow: 0 0 30px rgba(20, 184, 166, 0.2);
+
+            /* Show aurora in dark mode */
+            --aurora-opacity: 0.6;
 
             --gradient-primary: linear-gradient(135deg, #14B8A6 0%, #0F766E 100%);
             --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
@@ -657,7 +660,8 @@
             background: linear-gradient(-45deg, #020617, #064E3B, #020617, #0F172A);
             background-size: 400% 400%;
             animation: aurora 20s ease infinite;
-            opacity: 0.6;
+            opacity: var(--aurora-opacity, 0); /* Hidden in light mode */
+            transition: opacity var(--duration) var(--ease);
         }
 
         .glass-card {
@@ -1148,7 +1152,7 @@
             <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="margin-left: 0.25rem;"><i class="fas fa-th-large"></i> Dashboard</a>
             <form action="{% url 'logout' %}" method="post" style="display:inline; margin-left: 0.25rem;">
                 {% csrf_token %}
-                <button type="submit" class="btn" style="background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; font-family: inherit;">
+                <button type="submit" class="btn btn-secondary" style="cursor: pointer; font-family: inherit;">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
             </form>
