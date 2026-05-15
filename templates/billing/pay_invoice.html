@@ -19,25 +19,59 @@
             <h2 style="font-size: 2.25rem; color: var(--primary); font-weight: 800;">₹{{ invoice.amount }}</h2>
         </div>
 
-        <form method="post">
+        <form method="post" id="payment-form">
             {% csrf_token %}
             <div style="margin-bottom: 1.75rem; text-align: left;">
                 <label for="payment_method" style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem; font-weight: 600;">Payment Method</label>
                 <select name="payment_method" id="payment_method" required
                     style="width: 100%; padding: 0.85rem; border-radius: var(--radius); border: 1.5px solid var(--input-border); background: var(--input-bg); color: var(--text-main); appearance: none; font-size: 0.9rem; font-family: inherit; cursor: pointer;">
-                    <option value="digital">Digital Payment</option>
+                    <option value="digital">Digital Payment (UPI/Card)</option>
                     <option value="cash">Cash</option>
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 700;">
-                <i class="fas fa-lock"></i> Complete Payment
-            </button>
+            <div id="standard-actions">
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 700;">
+                    <i class="fas fa-lock"></i> Complete Payment
+                </button>
+                <button type="button" id="qr-pay-btn" class="btn btn-highlight" style="width: 100%; margin-top: 0.6rem; padding: 0.9rem; font-size: 0.95rem; font-weight: 700;">
+                    <i class="fas fa-qrcode"></i> Scan & Pay (Smart QR)
+                </button>
+            </div>
+            
             <a href="{% url 'generate_invoice_pdf' invoice.pk %}" class="btn" style="width: 100%; margin-top: 0.6rem; padding: 0.8rem; background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border);">
                 <i class="fas fa-file-pdf"></i> Download Invoice
             </a>
             <a href="{% url 'invoice_list' %}" style="display: block; margin-top: 1.25rem; color: var(--text-muted); font-size: 0.85rem;">Cancel and Back to List</a>
         </form>
+
+        <!-- Smart QR Modal (Hidden by Default) -->
+        <div id="qr-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 6, 23, 0.95); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(12px);">
+            <div style="background: var(--card-bg); width: 90%; max-width: 400px; padding: 2.5rem; border-radius: var(--radius-2xl); text-align: center; border: 1px solid var(--glass-border); box-shadow: var(--shadow-lg);">
+                <div id="qr-waiting">
+                    <h2 style="font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em;">Scan to Pay</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem;">Scan the QR with any UPI app (GPay, PhonePe, Paytm)</p>
+                    
+                    <div style="background: white; padding: 1.5rem; border-radius: var(--radius-xl); display: inline-block; margin-bottom: 2rem; box-shadow: 0 0 40px rgba(16, 185, 129, 0.15); border: 1px solid #e2e8f0;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=VetSphere_INV_{{ invoice.pk }}_AMT_{{ invoice.amount }}" alt="Payment QR" style="display: block; width: 180px; height: 180px;">
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; color: var(--primary); font-weight: 700; font-size: 0.9rem;">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <span>Waiting for Payment Signal...</span>
+                    </div>
+                </div>
+
+                <div id="qr-success" style="display: none; animation: fadeInUp 0.5s ease forwards;">
+                    <div style="width: 80px; height: 80px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 1.5rem; box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); animation: pulse-ring 1.5s infinite;">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h2 style="color: #10b981; font-weight: 900; margin-bottom: 0.5rem; font-size: 1.75rem;">Payment Received!</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Transaction verified successfully.</p>
+                    <p style="font-size: 0.75rem; color: var(--primary); font-weight: 700; margin-top: 1rem; letter-spacing: 0.05em;">REDIRECTING TO DASHBOARD...</p>
+                </div>
+            </div>
+        </div>
 
         <div style="margin-top: 1.75rem; display: flex; justify-content: center; gap: 1.25rem; color: var(--text-faint); font-size: 1.35rem;">
             <i class="fas fa-money-bill-wave" title="Cash"></i>
@@ -49,4 +83,35 @@
     </div>
 </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const qrPayBtn = document.getElementById('qr-pay-btn');
+        const qrModal = document.getElementById('qr-modal');
+        const qrWaiting = document.getElementById('qr-waiting');
+        const qrSuccess = document.getElementById('qr-success');
+        const paymentForm = document.getElementById('payment-form');
+        const paymentMethodSelect = document.getElementById('payment_method');
+
+        qrPayBtn.addEventListener('click', function() {
+            // Set payment method to digital automatically
+            paymentMethodSelect.value = 'digital';
+            
+            // Show Modal
+            qrModal.style.display = 'flex';
+            
+            // Simulation Logic
+            setTimeout(() => {
+                // Step 1: Hide QR/Waiting, Show Success
+                qrWaiting.style.display = 'none';
+                qrSuccess.style.display = 'block';
+                
+                // Step 2: Auto-submit form after animation
+                setTimeout(() => {
+                    paymentForm.submit();
+                }, 2500);
+            }, 4500); // Wait 4.5 seconds to simulate "Detection"
+        });
+    });
+</script>
 {% endblock %}

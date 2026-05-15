@@ -12,6 +12,7 @@
             <p style="color: var(--text-muted); font-size: 1.15rem; font-weight: 500;">Real-time system health and analytics overview.</p>
         </div>
         <div style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
+            <a href="{% url 'admin_report_pdf' %}" class="btn btn-secondary hover-lift" style="border-color: var(--primary); color: var(--primary);"><i class="fas fa-file-pdf"></i> Download Report</a>
             <a href="{% url 'admin_user_list' %}" class="btn btn-secondary hover-lift"><i class="fas fa-users-cog"></i> Manage Users</a>
             <a href="{% url 'admin_message_list' %}" class="btn btn-primary shimmer hover-lift"><i class="fas fa-inbox"></i> Inquiries ({{ total_messages }})</a>
         </div>

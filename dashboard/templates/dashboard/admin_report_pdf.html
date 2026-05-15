@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VetSphere Global Executive Report</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0.3cm;
+        }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            margin: 0;
+            padding: 10px;
+        }
+        .dashboard-container {
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #030712;
+        }
+        .header {
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .logo-box {
+            color: #10b981;
+            font-size: 22pt;
+            font-weight: 900;
+            letter-spacing: -1.0px;
+        }
+        .report-meta {
+            text-align: right;
+            color: #94a3b8;
+            font-size: 8pt;
+        }
+        .title-bar {
+            background: linear-gradient(to right, #10b981, #34d399);
+            height: 3px;
+            width: 80px;
+            margin-top: 3px;
+        }
+
+        .metric-table {
+            width: 100%;
+            border-spacing: 10px;
+            margin-bottom: 10px;
+        }
+        .metric-card {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+            padding: 15px 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 22pt;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+        .metric-label {
+            font-size: 7pt;
+            color: #10b981;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .main-content-table {
+            width: 100%;
+            border-spacing: 10px;
+        }
+        .content-box {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            vertical-align: top;
+        }
+        .box-title {
+            font-size: 9pt;
+            font-weight: 800;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 5px;
+        }
+
+        .revenue-highlight {
+            font-size: 28pt;
+            color: #10b981;
+            font-weight: 900;
+            margin: 5px 0;
+        }
+
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table.data-table th {
+            text-align: left;
+            font-size: 8pt;
+            color: #64748b;
+            padding: 5px;
+            border-bottom: 1px solid #1e293b;
+        }
+        table.data-table td {
+            padding: 6px 5px;
+            font-size: 9pt;
+            border-bottom: 1px solid #111827;
+        }
+        .tag {
+            background-color: #134e4a;
+            color: #2dd4bf;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 7pt;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 7pt;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <table style="width: 100%; margin-bottom: 10px; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">
+            <tr>
+                <td style="width: 50%;">
+                    <div class="logo-box">VetSphere<span style="color: #ffffff;">.</span></div>
+                    <div class="title-bar"></div>
+                </td>
+                <td class="report-meta" style="width: 50%;">
+                    <strong>GLOBAL INTELLIGENCE REPORT</strong><br>
+                    DATE: {{ today|date:"d M Y" }} | VS-{{ generated_at|date:"Ymd" }}-INF
+                </td>
+            </tr>
+        </table>
+
+        <table class="metric-table">
+            <tr>
+                <td class="metric-card" style="border-top: 3px solid #6366f1;">
+                    <div class="metric-label">Client Network</div>
+                    <div class="metric-value">{{ total_users }}</div>
+                    <div style="font-size: 6.5pt; color: #64748b;">ACTIVE ACCOUNTS</div>
+                </td>
+                <td class="metric-card" style="border-top: 3px solid #10b981;">
+                    <div class="metric-label">Managed Patients</div>
+                    <div class="metric-value">{{ total_pets }}</div>
+                    <div style="font-size: 6.5pt; color: #64748b;">TOTAL PET REGISTRY</div>
+                </td>
+                <td class="metric-card" style="border-top: 3px solid #f59e0b;">
+                    <div class="metric-label">Operational Volume</div>
+                    <div class="metric-value">{{ total_bookings }}</div>
+                    <div style="font-size: 6.5pt; color: #64748b;">COMPLETED APPOINTMENTS</div>
+                </td>
+            </tr>
+        </table>
+
+        <table class="main-content-table">
+            <tr>
+                <td class="content-box" style="width: 45%;">
+                    <div class="box-title">Financial Ecosystem</div>
+                    <div style="text-align: center; padding: 10px 0;">
+                        <div style="font-size: 8pt; color: #94a3b8; letter-spacing: 1px;">TOTAL REVENUE LIQUIDITY</div>
+                        <div class="revenue-highlight">₹{{ total_revenue }}</div>
+                        <div style="font-size: 7pt; color: #10b981; font-weight: bold;">
+                            100% SECURE TRANSACTIONS
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 10px;">
+                        <div class="box-title" style="font-size: 8pt; border: none; margin-bottom: 5px;">System Status</div>
+                        <table style="width: 100%; font-size: 8pt;">
+                            <tr><td style="color: #94a3b8;">DB Engine</td><td style="text-align: right; color: #10b981; font-weight: bold;">OPTIMIZED</td></tr>
+                            <tr><td style="color: #94a3b8;">Encryption</td><td style="text-align: right; color: #10b981; font-weight: bold;">ENCRYPTED</td></tr>
+                            <tr><td style="color: #94a3b8;">Latency</td><td style="text-align: right; color: #10b981; font-weight: bold;">24ms</td></tr>
+                        </table>
+                    </div>
+                </td>
+                <td class="content-box" style="width: 55%;">
+                    <div class="box-title">Service Dominance</div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>CATEGORY</th>
+                                <th style="text-align: right;">UNITS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for service in service_data|slice:":8" %}
+                            <tr>
+                                <td style="color: #f1f5f9; font-weight: bold;">{{ service.service__name }}</td>
+                                <td style="text-align: right;"><span class="tag">{{ service.count }}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="2" style="text-align: center; color: #64748b; padding: 20px 0;">NO DATA</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <div style="margin-top: 10px; background-color: #0f172a; border: 1px solid #1e293b; padding: 10px; border-radius: 8px;">
+            <div class="box-title" style="margin-bottom: 5px; border: none; font-size: 8.5pt;">Executive Conclusion</div>
+            <p style="font-size: 8pt; color: #94a3b8; margin: 0; line-height: 1.3;">
+                The VetSphere ecosystem is performing at peak efficiency. Operational capacity is scaling according to projections. This document serves as a verified snapshot of clinic health for stakeholders.
+            </p>
+        </div>
+
+        <div class="footer">
+            CONFIDENTIAL &bull; VETSPHERE ENTERPRISE SOLUTIONS &bull; AI CORE GENERATED
+        </div>
+    </div>
+</body>
+</html>

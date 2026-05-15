@@ -10,6 +10,10 @@ from django.db.models import Sum, Count
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
 from datetime import timedelta
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+import io
 from .models import ContactMessage
 from .forms import ContactForm
 
@@ -154,4 +158,48 @@ def about_view(request):
         "total_staff": total_staff,
         "avg_rating": round(avg_rating, 1),
     }
-    return render(request, "about.html", context)
+@user_passes_test(is_admin, login_url="admin_login")
+def admin_report_pdf(request):
+    # Total counts
+    total_users = User.objects.count()
+    total_pets = Pet.objects.count()
+    total_bookings = Booking.objects.count()
+    
+    # Total revenue from paid invoices
+    total_revenue = (
+        Invoice.objects.filter(status="paid").aggregate(
+            total=Sum("amount")
+        )["total"]
+        or 0
+    )
+
+    today = timezone.now().date()
+    
+    # Service Popularity
+    service_data_qs = Booking.objects.exclude(service__isnull=True).values('service__name').annotate(count=Count('id')).order_by('-count')
+    
+    context = {
+        "total_users": total_users,
+        "total_pets": total_pets,
+        "total_bookings": total_bookings,
+        "total_revenue": total_revenue,
+        "service_data": service_data_qs,
+        "generated_at": timezone.now(),
+        "today": today,
+    }
+
+    template_path = "dashboard/admin_report_pdf.html"
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf in memory
+    pdf_file = io.BytesIO()
+    pisa_status = pisa.CreatePDF(html, dest=pdf_file)
+
+    if pisa_status.err:
+        return HttpResponse("Error generating PDF <pre>" + html + "</pre>")
+        
+    response = HttpResponse(pdf_file.getvalue(), content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="VetSphere_Admin_Report_{today}.pdf"'
+
+    return response
