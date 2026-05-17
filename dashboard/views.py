@@ -158,6 +158,8 @@ def about_view(request):
         "total_staff": total_staff,
         "avg_rating": round(avg_rating, 1),
     }
+    return render(request, "about.html", context)
+
 @user_passes_test(is_admin, login_url="admin_login")
 def admin_report_pdf(request):
     # Total counts
