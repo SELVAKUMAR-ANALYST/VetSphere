@@ -3,6 +3,47 @@
 
 {% block title %}VetSphere – Digital Veterinary Care Platform{% endblock %}
 
+{% block extra_css %}
+<style>
+    @media (max-width: 1024px) {
+        .hero-banner {
+            flex-direction: column !important;
+            padding: 4rem 1.5rem !important;
+            min-height: auto !important;
+            text-align: center;
+        }
+        .hero-content {
+            padding-right: 0 !important;
+            margin-bottom: 3rem;
+        }
+        .hero-image-container {
+            display: none !important;
+        }
+        .hero-cta-group {
+            justify-content: center !important;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .floating-badge {
+            position: relative !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            margin: 1.5rem auto 0 !important;
+            width: fit-content;
+            text-align: center;
+        }
+        .home-cta-banner {
+            padding: 3rem 1.5rem !important;
+            margin-bottom: 4rem !important;
+        }
+        .home-cta-banner h2 {
+            font-size: 2rem !important;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- ═══════ HERO BANNER ═══════ -->
 <section class="hero-banner" style="min-height: clamp(600px, 90vh, 900px); display: flex; align-items: center; padding: clamp(2rem, 8vw, 6rem) 0;">
@@ -61,7 +102,7 @@
                         style="width: 100%; border-radius: var(--radius-xl); object-fit: cover; display: block;">
                 </div>
                 <!-- Floating Info Badge -->
-                <div class="glass-card hover-lift"
+                <div class="glass-card hover-lift floating-badge"
                     style="position: absolute; bottom: -2rem; right: -2rem; padding: 1.5rem; border-radius: var(--radius-lg); background: var(--nav-bg); color: var(--text-main);">
                     <div style="font-size: 2rem; font-weight: 900; color: var(--primary); line-height: 1;">99%</div>
                     <div style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Owner Satisfaction
@@ -117,7 +158,7 @@
 </section>
 
 <!-- CTA Banner -->
-<div class="glass-card fade-in shimmer"
+<div class="glass-card fade-in shimmer home-cta-banner"
     style="padding: 5rem; text-align: center; margin-bottom: 8rem; border-color: var(--primary);">
     <h2
         style="font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 1.5rem; color: var(--text-main);">

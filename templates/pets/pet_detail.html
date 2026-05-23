@@ -123,6 +123,50 @@
     .tab-btn.active { color: var(--primary); border-color: var(--primary); }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .profile-header {
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+            padding: 1.5rem !important;
+            gap: 1.5rem !important;
+        }
+        .profile-header > div:last-child {
+            width: 100%;
+        }
+        .profile-header > div:last-child > div:first-child {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 1rem !important;
+            margin-bottom: 1rem !important;
+        }
+        .profile-header .btn {
+            width: 100% !important;
+            justify-content: center !important;
+        }
+        .profile-header .stats-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+            text-align: center !important;
+        }
+        .pet-detail-main-layout {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+        }
+        .pet-detail-main-layout > div:last-child {
+            position: relative !important;
+            top: 0 !important;
+        }
+        .tabs {
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            flex: 1;
+            text-align: center;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -153,7 +197,7 @@
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-lg);">
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-lg);">
                 <div>
                     <h3 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.35rem; font-weight: 700;">Age</h3>
                     <p style="font-size: 1.1rem; font-weight: 700;">{{ pet.age }} <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-faint);">Years</span></p>
@@ -170,7 +214,7 @@
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start;">
+    <div class="pet-detail-main-layout" style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start;">
         <div>
             <div class="tabs">
                 <div class="tab-btn active" onclick="switchTab(event, 'daily-logs')">Daily Activity</div>

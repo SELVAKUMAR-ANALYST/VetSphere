@@ -7,15 +7,39 @@
     .invoice-status { font-weight: 700; }
     .status-paid { color: var(--alert-success-text); }
     .status-unpaid { color: var(--alert-error-text); }
+
+    @media (max-width: 768px) {
+        .invoice-header-row {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 1.5rem !important;
+        }
+        .invoice-header-row > div {
+            text-align: left !important;
+        }
+        .invoice-payment-row {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 1.25rem !important;
+            text-align: center !important;
+        }
+        .invoice-payment-row a {
+            width: 100% !important;
+            justify-content: center !important;
+        }
+        .invoice-detail-card {
+            padding: 1.5rem !important;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container">
 <div class="fade-in" style="max-width: 800px; margin: 1.5rem auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem;">
+    <div class="dash-welcome-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem;">
         <h1 style="font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em;">Invoice Details</h1>
-        <div style="display: flex; gap: 0.75rem;">
+        <div class="dash-welcome-actions" style="display: flex; gap: 0.75rem;">
             <a href="{% url 'generate_invoice_pdf' invoice.pk %}" class="btn btn-primary">
                 <i class="fas fa-file-pdf"></i> Download PDF
             </a>
@@ -23,8 +47,8 @@
         </div>
     </div>
 
-    <div style="background: var(--card-bg); padding: 2.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--border);">
-        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 1.75rem; margin-bottom: 1.75rem;">
+    <div class="invoice-detail-card" style="background: var(--card-bg); padding: 2.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--border);">
+        <div class="invoice-header-row" style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 1.75rem; margin-bottom: 1.75rem;">
             <div>
                 <h2 style="color: var(--primary); font-weight: 800; margin-bottom: 0.35rem; font-size: 1.4rem; letter-spacing: -0.02em;">VETSPHERE</h2>
                 <p style="color: var(--text-muted); font-size: 0.82rem;">
@@ -79,7 +103,7 @@
         </table>
 
         {% if invoice.status == 'unpaid' %}
-        <div style="background: var(--alert-error-bg); border: 1px solid var(--alert-error-border); padding: 1.5rem; border-radius: var(--radius-lg); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);">
+        <div class="invoice-payment-row" style="background: var(--alert-error-bg); border: 1px solid var(--alert-error-border); padding: 1.5rem; border-radius: var(--radius-lg); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);">
             <div>
                 <p style="color: var(--alert-error-text); margin: 0; font-size: 1rem; font-weight: 700;">Payment Required</p>
                 <p style="color: var(--alert-error-text); margin: 0; font-size: 0.85rem; opacity: 0.9;">Please complete the payment for this invoice.</p>

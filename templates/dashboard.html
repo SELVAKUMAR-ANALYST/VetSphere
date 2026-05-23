@@ -6,16 +6,44 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    @media (max-width: 768px) {
+        .dash-welcome-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 1.5rem !important;
+            margin-bottom: 2rem !important;
+        }
+        .dash-welcome-header h1 {
+            font-size: 2rem !important;
+        }
+        .dash-welcome-actions {
+            width: 100% !important;
+            justify-content: stretch !important;
+        }
+        .dash-welcome-actions a {
+            flex: 1 !important;
+            text-align: center !important;
+            justify-content: center !important;
+        }
+        .dash-top-row {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container">
 <div class="fade-in">
     <!-- Welcome Header -->
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
+    <div class="dash-welcome-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
         <div>
             <h1 style="font-size: 2.75rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 0.5rem; color: var(--text-main); line-height: 1.1;">Welcome back, <span style="background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ user.username }}</span>!</h1>
             <p style="color: var(--text-muted); font-size: 1.15rem; font-weight: 500;">Your VetSphere command center is ready.</p>
         </div>
-        <div style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
+        <div class="dash-welcome-actions" style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
             {% if not user.is_staff %}
             <a href="{% url 'profile_settings' %}" class="btn btn-secondary hover-lift" style="padding: 0.85rem 1.5rem; border-radius: var(--radius-lg);">
                 <i class="fas fa-cog"></i> Settings
@@ -44,7 +72,7 @@
     </div>
 
     <!-- Top row: Health + Gallery -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+    <div class="dash-top-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
         
         <!-- Health Dashboards & Alerts -->
         <div class="glass-card hover-lift" style="padding: 2rem;">

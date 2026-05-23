@@ -25,6 +25,27 @@
     .status-badge { padding: 0.2rem 0.65rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 600; }
     .status-unpaid { background: var(--alert-error-bg); color: var(--alert-error-text); }
     .status-paid { background: var(--alert-success-bg); color: var(--alert-success-text); }
+
+    @media (max-width: 768px) {
+        .invoice-card {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 1rem !important;
+            padding: 1.5rem !important;
+        }
+        .invoice-card > div:last-child {
+            width: 100% !important;
+            justify-content: space-between !important;
+            flex-wrap: wrap !important;
+            gap: 1rem !important;
+            border-top: 1px solid var(--border-light);
+            padding-top: 1rem;
+        }
+        .invoice-card .btn {
+            flex: 1 !important;
+            justify-content: center !important;
+        }
+    }
 </style>
 {% endblock %}
 

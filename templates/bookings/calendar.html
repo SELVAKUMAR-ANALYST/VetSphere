@@ -48,14 +48,42 @@
     .status-confirmed { background: var(--status-confirmed-bg); color: var(--status-confirmed-text); }
     .status-checked_in { background: var(--status-checkedin-bg); color: var(--status-checkedin-text); }
     .status-completed { background: var(--status-completed-bg); color: var(--status-completed-text); }
+
+    @media (max-width: 768px) {
+        .dash-welcome-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 1rem !important;
+        }
+        .dash-welcome-actions {
+            width: 100% !important;
+            justify-content: stretch !important;
+        }
+        .dash-welcome-actions a {
+            flex: 1 !important;
+            text-align: center !important;
+            justify-content: center !important;
+        }
+        .calendar-container {
+            padding: 1rem !important;
+        }
+        #calendar {
+            height: 450px !important;
+        }
+        .fc-header-toolbar {
+            flex-direction: column !important;
+            gap: 0.75rem !important;
+            align-items: center !important;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="fade-in">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem;">
+    <div class="dash-welcome-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem;">
         <h1 style="font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em;">Booking Calendar</h1>
-        <div style="display: flex; gap: 0.75rem;">
+        <div class="dash-welcome-actions" style="display: flex; gap: 0.75rem;">
             <a href="{% url 'booking_list' %}" class="btn" style="background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border);">List View</a>
             <a href="{% url 'booking_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> New Booking</a>
         </div>
@@ -70,7 +98,8 @@
         <h2 style="font-weight: 700; margin-bottom: 1.25rem; font-size: 1.15rem;">Booking History</h2>
 
         <div style="background: var(--card-bg); border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow);">
-            <table style="width: 100%; border-collapse: collapse;">
+            <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 550px;">
                 <thead>
                     <tr style="background: var(--bg-subtle); border-bottom: 2px solid var(--border);">
                         <th style="text-align: left; padding: 0.75rem 1.25rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">Pet</th>
@@ -112,6 +141,7 @@
                 </tbody>
             </table>
         </div>
+    </div>
     </div>
 </div>
 {% endblock %}

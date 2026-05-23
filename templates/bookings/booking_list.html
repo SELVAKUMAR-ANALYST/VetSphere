@@ -51,44 +51,46 @@
     {% if user.is_staff %}
     <!-- Admin View: Streamlined Table -->
     <div style="background: var(--card-bg); border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; margin-top: 1rem;">
-        <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr style="background: rgba(0,0,0,0.02);">
-                    <th style="text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Pet</th>
-                    <th style="text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Service</th>
-                    <th style="text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Schedule</th>
-                    <th style="text-align: center; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Action</th>
-                    <th style="text-align: right; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for booking in bookings %}
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 1rem 1.5rem;">
-                        <div style="font-weight: 700; color: var(--text-main);">{{ booking.pet.name }}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ booking.pet.owner.username }}</div>
-                    </td>
-                    <td style="padding: 1rem 1.5rem; font-size: 0.88rem; color: var(--text-secondary);">{{ booking.service.name }}</td>
-                    <td style="padding: 1rem 1.5rem; font-size: 0.85rem; color: var(--text-secondary);">
-                        <div>{{ booking.start_time|date:"M d, Y" }}</div>
-                        <div style="color: var(--text-muted); font-size: 0.75rem;">{{ booking.start_time|date:"h:i A" }} - {{ booking.end_time|date:"h:i A" }}</div>
-                    </td>
-                    <td style="padding: 1rem 1.5rem; text-align: center;">
-                        {% if booking.status == 'confirmed' or booking.status == 'pending' %}
-                        <a href="{% url 'check_in' booking.pk %}" class="btn btn-primary btn-sm" style="padding: 0.3rem 0.8rem; font-size: 0.75rem;">Check In</a>
-                        {% elif booking.status == 'checked_in' %}
-                        <a href="{% url 'check_out' booking.pk %}" class="btn btn-sm" style="background: var(--primary-light); color: var(--primary); border: none; padding: 0.3rem 0.8rem; font-size: 0.75rem;">Check Out</a>
-                        {% else %}
-                        <span style="color: var(--text-faint); font-size: 0.75rem;">N/A</span>
-                        {% endif %}
-                    </td>
-                    <td style="padding: 1rem 1.5rem; text-align: right;">
-                        <span class="status-badge status-{{ booking.status }}">{{ booking.get_status_display }}</span>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+            <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                <thead>
+                    <tr style="background: rgba(0,0,0,0.02);">
+                        <th style="text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Pet</th>
+                        <th style="text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Service</th>
+                        <th style="text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Schedule</th>
+                        <th style="text-align: center; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Action</th>
+                        <th style="text-align: right; padding: 1rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-bottom: 2px solid var(--border); text-transform: uppercase;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 1rem 1.5rem;">
+                            <div style="font-weight: 700; color: var(--text-main);">{{ booking.pet.name }}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">{{ booking.pet.owner.username }}</div>
+                        </td>
+                        <td style="padding: 1rem 1.5rem; font-size: 0.88rem; color: var(--text-secondary);">{{ booking.service.name }}</td>
+                        <td style="padding: 1rem 1.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                            <div>{{ booking.start_time|date:"M d, Y" }}</div>
+                            <div style="color: var(--text-muted); font-size: 0.75rem;">{{ booking.start_time|date:"h:i A" }} - {{ booking.end_time|date:"h:i A" }}</div>
+                        </td>
+                        <td style="padding: 1rem 1.5rem; text-align: center;">
+                            {% if booking.status == 'confirmed' or booking.status == 'pending' %}
+                            <a href="{% url 'check_in' booking.pk %}" class="btn btn-primary btn-sm" style="padding: 0.3rem 0.8rem; font-size: 0.75rem;">Check In</a>
+                            {% elif booking.status == 'checked_in' %}
+                            <a href="{% url 'check_out' booking.pk %}" class="btn btn-sm" style="background: var(--primary-light); color: var(--primary); border: none; padding: 0.3rem 0.8rem; font-size: 0.75rem;">Check Out</a>
+                            {% else %}
+                            <span style="color: var(--text-faint); font-size: 0.75rem;">N/A</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 1rem 1.5rem; text-align: right;">
+                            <span class="status-badge status-{{ booking.status }}">{{ booking.get_status_display }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     {% else %}
     <!-- Customer View: Card Layout -->

@@ -33,6 +33,55 @@
         border: 1px solid var(--glass-border);
     }
 
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .info-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        background: var(--primary-light);
+        color: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 1.1rem;
+        border: 1px solid var(--glass-border);
+    }
+    
+    .info-text h4 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+    
+    .info-text p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+    }
+    
+    .map-placeholder {
+        margin-top: 2rem;
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        border: 1px solid var(--border);
+        height: 250px;
+    }
+    
+    .map-placeholder iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
     .contact-grid {
         display: grid;
         grid-template-columns: 1fr 1fr 1.5fr;
@@ -125,9 +174,35 @@
         gap: 0.6rem;
     }
 
+    @media (max-width: 1200px) and (min-width: 801px) {
+        .contact-grid {
+            grid-template-columns: 1fr 1.2fr !important;
+        }
+        .contact-grid > div:nth-child(2) {
+            display: none !important;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .contact-hero {
+            grid-template-columns: 1fr !important;
+            padding: 4rem 1.5rem !important;
+            text-align: center !important;
+        }
+        .contact-hero div:last-child {
+            display: none !important;
+        }
+    }
+
     @media (max-width: 800px) {
         .contact-grid { grid-template-columns: 1fr; }
         .form-row { grid-template-columns: 1fr; }
+        .contact-grid > div:nth-child(2) {
+            display: none !important;
+        }
+        .contact-info-card, .contact-form-card {
+            padding: 2rem 1.5rem !important;
+        }
     }
 </style>
 {% endblock %}
