@@ -2,7 +2,7 @@
 
 A full-featured, role-based **Pet Care Management System** built with Django — designed for veterinary clinics and pet care centers to streamline appointments, billing, staff management, and CRM operations.
 
-🌐 **Live Demo:** [https://vetsphere.onrender.com](https://vetsphere.onrender.com) *(Update this link to your actual Render URL)*
+🌐 **Live Demo:** [https://vetsphere.onrender.com](https://vetsphere.onrender.com)
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)
 ![Django](https://img.shields.io/badge/Django-5.0%2B-green?style=flat-square&logo=django)
