@@ -2,6 +2,8 @@
 
 A full-featured, role-based **Pet Care Management System** built with Django — designed for veterinary clinics and pet care centers to streamline appointments, billing, staff management, and CRM operations.
 
+🌐 **Live Demo:** [https://vetsphere.onrender.com](https://vetsphere.onrender.com) *(Update this link to your actual Render URL)*
+
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)
 ![Django](https://img.shields.io/badge/Django-5.0%2B-green?style=flat-square&logo=django)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?style=flat-square&logo=bootstrap)
@@ -26,6 +28,12 @@ A full-featured, role-based **Pet Care Management System** built with Django —
 ## 🎯 About the Project
 
 **VetSphere** is a comprehensive Django-based web application built to modernize and automate the day-to-day operations of veterinary clinics and pet care centers. From managing pet records and booking appointments to generating invoices and tracking staff rosters — VetSphere brings everything under one unified platform.
+
+### 🌟 Project Highlights (Resume Worthy)
+- **Full-Stack Architecture:** Developed robust backend logic with Django ORM handling relationships across 7+ core modules.
+- **Glassmorphism UI:** Built a custom, modern design system from scratch using pure CSS, featuring dynamic frosted glass effects.
+- **Mobile-First Design:** Implemented 100% fluid layouts and sliding drawer navigations for optimal experience on mobile devices.
+- **Cloud Deployment:** Configured automated CI/CD pipeline and deployed on Render with PostgreSQL integration.
 
 Whether you're a clinic admin managing operations, a staff member updating records, or a pet owner tracking your pet's health history, VetSphere provides a seamless and intuitive experience for all.
 
