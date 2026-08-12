@@ -45,6 +45,7 @@ urlpatterns = [
         name="contact",
     ),
     path("services/", services_view, name="services"),
+    path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain"), name="robots_txt"),
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
 ]
 
