@@ -21,6 +21,8 @@ from accounts.views import dashboard
 from bookings.views import services_view
 from django.views.generic import TemplateView
 from dashboard.views import contact_view, about_view
+from django.contrib.sitemaps.views import sitemap
+from pet_care_management.sitemaps import StaticViewSitemap
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -46,6 +48,7 @@ urlpatterns = [
     ),
     path("services/", services_view, name="services"),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain"), name="robots_txt"),
+    path("sitemap.xml", sitemap, {"sitemaps": {"static": StaticViewSitemap}}, name="django.contrib.sitemaps.views.sitemap"),
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
 ]
 

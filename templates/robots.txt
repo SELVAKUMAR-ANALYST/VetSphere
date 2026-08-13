@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /accounts/
+
+Sitemap: https://vetsphere.onrender.com/sitemap.xml
